@@ -89,6 +89,20 @@ public class MatrixSeqTest {
 		assert(!m3.isSquare());
 	}
 	
+	@Test
+	public void testCreateSubMatrix() {
+		String result = (m2.createSubMatrix(0, 0)).toString();
+		String expected = "1.0 2.0 3.0 \n2.0 4.0 6.0 \n3.0 6.0 9.0";
+		assert(expected.equals(result));
+	}
+	
+//	@Test
+//	public void testCofactor() {
+//		String result = (m2.cofactor()).toString();
+//		String expected = "1.0 2.0 3.0 \n2.0 4.0 6.0 \n3.0 6.0 9.0";
+//		assert(expected.equals(result));		
+//	}
+	
 	/*@Test
 	public void testMultiply() {
 		Matrix matrixResult = new Matrix(4,4,true,0);

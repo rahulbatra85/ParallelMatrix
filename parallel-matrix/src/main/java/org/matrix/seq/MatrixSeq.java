@@ -20,16 +20,16 @@ public class MatrixSeq extends Matrix {
 		super(rows,columns,zerod,max);
 	}
 
-	/*public static int flipOdd(int i) {
+	public static int flipOdd(int i) {
 		if((i % 2) == 0) return 1;
 		else 
 			return -1;
-	}*/
-	
-	/*
-	public void adjoint(Matrix a) {
-		a = transpose(cofactor());
 	}
+	
+	
+/*	public void adjoint(Matrix a) {
+		a = transpose(cofactor());
+	}*/
 	    
 	public void scalarMultiply(Matrix result, double scalar) {	    
 		for (int i=0; i<getNumRows(); i++) {
@@ -47,27 +47,29 @@ public class MatrixSeq extends Matrix {
 		}
 	}
 	
-	public void createSubMatrix(Matrix s, int x, int y) {	   
+	public Matrix createSubMatrix(int excludeRow, int excludeCol) {	   
 	    int r = -1;
+	    Matrix result = new MatrixSeq((getNumRows()-1),(getNumColumns()-1),true,0);
 	    for (int i=0;i<getNumRows();i++) {
-	        if (i==x)
+	        if (i==excludeRow)
 	            continue;
 	            r++;
 	            int c = -1;
 	        for (int j=0;j<getNumColumns();j++) {
-	            if (j==y)
+	            if (j==excludeCol)
 	                continue;
-	            s.setElem(r, ++c, matrix[x][y]);
+	            result.setElem(r, ++c, matrix[i][j]);
 	        }
 	    }
-	}*/
+	    return result;
+	}
 	
 	/*public Matrix cofactor() {
-		Matrix subMat = new Matrix((getNumRows()-1),(getNumColumns()-1),true,0);
-		Matrix cofactorResult = new Matrix(getNumRows(),getNumColumns(),true,0);
+		MatrixSeq subMat = new MatrixSeq((getNumRows()-1),(getNumColumns()-1),true,0);
+		MatrixSeq cofactorResult = new MatrixSeq(getNumRows(),getNumColumns(),true,0);
 		for(int i=0; i<getNumRows(); i++) {
 			for(int j=0; j<getNumColumns(); j++) {
-				subMat = createSubMatrix(this,i,j);
+				subMat = (MatrixSeq)createSubMatrix(i,j);
 				try {
 				   cofactorResult.setElem(i, j, (flipOdd(i+j)*subMat.determinant()));
 				} catch(Exception e) {
@@ -77,5 +79,23 @@ public class MatrixSeq extends Matrix {
 		}
         return cofactorResult;
 	}*/
+	
+	public static void main(String[] args) {
+		System.out.println("test");
+		MatrixSeq testSub = new MatrixSeq(3,3,true,0);
+		double[] arow = {1,2,3};
+		double[] brow = {0,4,5};
+		double[] crow = {1,0,6};
+		testSub.setRow(arow, 0);
+		testSub.setRow(brow, 1);
+		testSub.setRow(crow, 2);
+		System.out.println(testSub.toString());
+		//System.out.println((testSub.cofactor()).toString());
+		try {
+		   System.out.println("Determinant: " + testSub.determinant());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
 }

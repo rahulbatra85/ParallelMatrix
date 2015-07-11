@@ -83,9 +83,11 @@ public abstract class Matrix {
 	//Returns throws exception if matrix is not square
 	//Otherwise, returns the determinant
 	public double determinant() throws Exception {	
-		if (this.isSquare()) {
+		if (!this.isSquare()) {
+			System.out.println("The not square matrix is: \n" + this.toString());
 			throw new Exception("Need square matrix."); //todo define matrix exception
 		} else{
+			System.out.println("Calling determinant on: " + this.toString());
 			return this.mOpDeterminant.determinant(this);
 		}
 	}
@@ -175,7 +177,16 @@ public abstract class Matrix {
 	}
 		
 	public boolean isSquare() {
-		return (getNumRows() == getNumColumns());
+		System.out.println("Rows: " + getNumRows() + " columns: " + getNumColumns());
+		boolean returnVal = false;
+		if(getNumRows() == getNumColumns()) {
+			System.out.println("Setting return val to true.");
+			returnVal = true;
+		} else {
+			System.out.println("Setting return val to false");
+			returnVal = false;
+		}
+		return returnVal;
 	}
 	
 }
