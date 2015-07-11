@@ -8,7 +8,6 @@ public class DeterminantSeq implements IfaceDeterminant {
 	@Override
 	public double determinant(Matrix A) throws Exception {
 		MatrixSeq seqA = (MatrixSeq)A;
-		System.out.println("Matrix: " + seqA.toString());
         if (!seqA.isSquare()) {
 	        throw new Exception("Need square matrix."); //todo define matrix exception
         }
@@ -20,7 +19,6 @@ public class DeterminantSeq implements IfaceDeterminant {
 		}
 		double sum = 0.0;
 		for (int i=0; i<seqA.getNumColumns(); i++) {
-			System.out.println("I: " + i);
 		    sum += MatrixSeq.flipOdd(i) * seqA.getElem(0, i) * determinant(seqA.createSubMatrix(0, i));
 		}
 		return sum;

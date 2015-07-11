@@ -18,6 +18,12 @@ public class MatrixSeq extends Matrix {
 	
 	public MatrixSeq(int rows, int columns, boolean zerod, int max){
 		super(rows,columns,zerod,max);
+		this.mOpAdd = new AddSeq();
+		this.mOpDeterminant = new DeterminantSeq();
+		this.mOpInverse = new InverseSeq();
+		this.mOpLinearSolver = new LinearSolverSeq();
+		this.mOpLUDecompose = new LUDecomposeSeq();
+		this.mOpMult = new MultSeq();
 	}
 
 	public static int flipOdd(int i) {
@@ -27,24 +33,29 @@ public class MatrixSeq extends Matrix {
 	}
 	
 	
-/*	public void adjoint(Matrix a) {
-		a = transpose(cofactor());
-	}*/
+	public Matrix adjoint() {
+		Matrix result = ((MatrixSeq) this.cofactor()).transpose();
+		return result;
+	}
 	    
-	public void scalarMultiply(Matrix result, double scalar) {	    
+	public Matrix scalarMultiply(double scalar) {
+		Matrix result = new MatrixSeq(getNumRows(),getNumColumns(),true,0);
 		for (int i=0; i<getNumRows(); i++) {
 			for (int j=0; j<getNumColumns(); j++) {
 	    		result.setElem(i, j, scalar*matrix[i][j]);
 	    	}
 	    }	    
+		return result;
 	}
 	
-	public void transpose(Matrix t) {
+	public Matrix transpose() {
+		Matrix result = new MatrixSeq(getNumRows(),getNumColumns(),true,0);
 		for(int i=0; i<getNumRows(); i++) {
 			for(int j=0; j<getNumColumns(); j++) {
-				t.setElem(i, j, matrix[j][i]);
+				result.setElem(i, j, matrix[j][i]);
 			}
 		}
+		return result;
 	}
 	
 	public Matrix createSubMatrix(int excludeRow, int excludeCol) {	   
@@ -64,7 +75,7 @@ public class MatrixSeq extends Matrix {
 	    return result;
 	}
 	
-	/*public Matrix cofactor() {
+	public Matrix cofactor() {
 		MatrixSeq subMat = new MatrixSeq((getNumRows()-1),(getNumColumns()-1),true,0);
 		MatrixSeq cofactorResult = new MatrixSeq(getNumRows(),getNumColumns(),true,0);
 		for(int i=0; i<getNumRows(); i++) {
@@ -78,7 +89,21 @@ public class MatrixSeq extends Matrix {
 			}
 		}
         return cofactorResult;
-	}*/
+	}
+	
+	public Matrix invert() {
+		Matrix inverse = new MatrixSeq(getNumRows(), getNumColumns(), true, 0);
+		double det = 0;
+		try {
+		    det = determinant();
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		det = 1/det;
+		MatrixSeq adjointR = (MatrixSeq)adjoint();
+		inverse = adjointR.scalarMultiply(det);
+		return inverse;
+	}
 	
 	public static void main(String[] args) {
 		System.out.println("test");
@@ -92,7 +117,7 @@ public class MatrixSeq extends Matrix {
 		System.out.println(testSub.toString());
 		//System.out.println((testSub.cofactor()).toString());
 		try {
-		   System.out.println("Determinant: " + testSub.determinant());
+		   System.out.println("transpose: " + testSub.scalarMultiply(5));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -11,12 +11,20 @@ public class MatrixSeqTest {
 	MatrixSeq m1;
 	MatrixSeq m2;
 	MatrixSeq m3;
+	MatrixSeq m4;
 	
 	@Before
 	public void setUp() throws Exception {
 		m1 = new MatrixSeq(4,4,false,10);
 		m2 = new MatrixSeq(4,4,false,5);
 		m3 = new MatrixSeq(3,4,false,5);
+		m4 = new MatrixSeq(3,3,true,0);
+		double[] arow = {1,2,3};
+		double[] brow = {0,4,5};
+		double[] crow = {1,0,6};
+		m4.setRow(arow, 0);
+		m4.setRow(brow, 1);
+		m4.setRow(crow, 2);		
 	}
 	
 	@Test
@@ -96,12 +104,32 @@ public class MatrixSeqTest {
 		assert(expected.equals(result));
 	}
 	
-//	@Test
-//	public void testCofactor() {
-//		String result = (m2.cofactor()).toString();
-//		String expected = "1.0 2.0 3.0 \n2.0 4.0 6.0 \n3.0 6.0 9.0";
-//		assert(expected.equals(result));		
-//	}
+	@Test
+	public void testCofactor() {
+		String result = (m4.cofactor()).toString();
+		String expected = "24.0 5.0 -4.0 \n-12.0 3.0 2.0 \n-2.0 -5.0 4.0 \n";
+		assertTrue(expected.equals(result));		
+	}
+	
+	@Test
+	public void testTranspose() {
+		String result = (m2.transpose()).toString();
+		String expected = "0.0 0.0 0.0 0.0 \n0.0 1.0 2.0 3.0 \n0.0 2.0 4.0 1.0 \n0.0 3.0 1.0 4.0 \n";
+		System.out.println("Result: \n" + result.toString());
+		System.out.println("Expected: \n" + expected.toString());
+		assertTrue(expected.equals(result));		
+	}
+	@Test
+	public void testScalarMultiply() {
+		String result = (m2.scalarMultiply(5)).toString();
+		String expected = "0.0 0.0 0.0 0.0 \n0.0 5.0 10.0 15.0 \n0.0 10.0 20.0 5.0 \n0.0 15.0 5.0 20.0 \n";
+		assertTrue(expected.equals(result));		
+	}
+	
+	@Test
+	public void testLinearSolver() {
+		
+	}
 	
 	/*@Test
 	public void testMultiply() {
