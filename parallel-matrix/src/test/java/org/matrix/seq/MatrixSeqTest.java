@@ -12,6 +12,8 @@ public class MatrixSeqTest {
 	MatrixSeq m2;
 	MatrixSeq m3;
 	MatrixSeq m4;
+	MatrixSeq m5;
+	MatrixSeq m6;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -19,12 +21,23 @@ public class MatrixSeqTest {
 		m2 = new MatrixSeq(4,4,false,5);
 		m3 = new MatrixSeq(3,4,false,5);
 		m4 = new MatrixSeq(3,3,true,0);
+		m5 = new MatrixSeq(3,3,true,0);
+		m6 = new MatrixSeq(3,1,true,0);
 		double[] arow = {1,2,3};
 		double[] brow = {0,4,5};
 		double[] crow = {1,0,6};
 		m4.setRow(arow, 0);
 		m4.setRow(brow, 1);
-		m4.setRow(crow, 2);		
+		m4.setRow(crow, 2);	
+		double[] drow = {1,1,1};
+		double[] erow = {0,2,5};
+		double[] frow = {2,5,-1};
+		m5.setRow(drow, 0);
+		m5.setRow(erow, 1);
+		m5.setRow(frow, 2);
+		m6.setElem(0, 0, 6);
+		m6.setElem(1, 0, -4);
+		m6.setElem(2, 0, 27);
 	}
 	
 	@Test
@@ -115,8 +128,6 @@ public class MatrixSeqTest {
 	public void testTranspose() {
 		String result = (m2.transpose()).toString();
 		String expected = "0.0 0.0 0.0 0.0 \n0.0 1.0 2.0 3.0 \n0.0 2.0 4.0 1.0 \n0.0 3.0 1.0 4.0 \n";
-		System.out.println("Result: \n" + result.toString());
-		System.out.println("Expected: \n" + expected.toString());
 		assertTrue(expected.equals(result));		
 	}
 	@Test
@@ -126,17 +137,28 @@ public class MatrixSeqTest {
 		assertTrue(expected.equals(result));		
 	}
 	
+
 	@Test
-	public void testLinearSolver() {
-		
-	}
-	
-	/*@Test
 	public void testMultiply() {
-		Matrix matrixResult = new Matrix(4,4,true,0);
-		Matrix.multiply(m1, m2, matrixResult);
+		Matrix matrixResult = m1.multiply(m2);
 		String expected = "0.0 0.0 0.0 0.0 \n0.0 14.0 13.0 17.0 \n0.0 28.0 26.0 34.0 \n0.0 42.0 39.0 51.0 \n";
 		assertEquals(matrixResult.toString(),expected);
-	}*/
+	}
+	
+	@Test
+	public void testLinearSolve() {
+		String matrixResult = (m5.linearSolve(m6)).toString();
+		String expected = "4.999999999999999 \n3.0 \n-1.9999999999999998 \n";
+		assertTrue(matrixResult.equals(expected));
+	}
+	
+	@Test
+	public void testInverse() {
+		Matrix matrixResult = m5.inverse();
+		System.out.println("M1: \n" + m5.toString());
+		String expected = "1.2857142857142856 -0.2857142857142857 -0.14285714285714285 \n-0.47619047619047616 0.14285714285714285 0.23809523809523808 \n0.19047619047619047 0.14285714285714285 -0.09523809523809523 \n";
+        System.out.println("Result: \n" + matrixResult.toString());
+		assertEquals(matrixResult.toString(),expected);		
+	}
 	
 }

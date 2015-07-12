@@ -8,7 +8,7 @@ public class LinearSolverSeq implements IfaceLinearSolver {
 	@Override
 	public Matrix linearSolver(Matrix A, Matrix B) {
 		// TODO Auto-generated method stub
-		Matrix invA = ((MatrixSeq)A).invert();
+		Matrix invA = ((MatrixSeq)A).inverse();
 		Matrix result = invA.multiply(B);
 		return result;
 	}

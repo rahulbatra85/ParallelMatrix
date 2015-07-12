@@ -91,36 +91,10 @@ public class MatrixSeq extends Matrix {
         return cofactorResult;
 	}
 	
-	public Matrix invert() {
-		Matrix inverse = new MatrixSeq(getNumRows(), getNumColumns(), true, 0);
-		double det = 0;
-		try {
-		    det = determinant();
-		} catch (Exception e) {
-			System.out.println(e.toString());
-		}
-		det = 1/det;
-		MatrixSeq adjointR = (MatrixSeq)adjoint();
-		inverse = adjointR.scalarMultiply(det);
-		return inverse;
-	}
 	
 	public static void main(String[] args) {
 		System.out.println("test");
-		MatrixSeq testSub = new MatrixSeq(3,3,true,0);
-		double[] arow = {1,2,3};
-		double[] brow = {0,4,5};
-		double[] crow = {1,0,6};
-		testSub.setRow(arow, 0);
-		testSub.setRow(brow, 1);
-		testSub.setRow(crow, 2);
-		System.out.println(testSub.toString());
-		//System.out.println((testSub.cofactor()).toString());
-		try {
-		   System.out.println("transpose: " + testSub.scalarMultiply(5));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+
 	}
 	
 }

@@ -25,8 +25,7 @@ public class MultSeq implements IfaceMult {
 				}
 				C.setElem(i, j, value);
 			}
-		}
-		
+		}		
 		return C;
 	}
 	
