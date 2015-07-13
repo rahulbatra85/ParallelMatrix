@@ -21,7 +21,7 @@ public class TestMatrixAdd {
 		m2 = new MatrixSeq(4,4,false,5);
 			
 		//fail("Matrix add returned false");
-		
+
 		
 	}
 	
