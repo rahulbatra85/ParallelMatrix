@@ -1,6 +1,7 @@
 import argparse
 import random
 import numpy.linalg
+import scipy.linalg
 
 file1="A"
 file2="B"
@@ -17,10 +18,10 @@ maxROWA=10
 maxCOLA=10
 maxROWB=10
 maxCOLB=10
-maxROWA=2
-maxCOLA=2
-maxROWB=2
-maxCOLB=2
+maxROWA=3
+maxCOLA=3
+maxROWB=3
+maxCOLB=3
 
 noFloat=1
 
@@ -181,35 +182,46 @@ def main():
 		f.write("\n")
 
 	#Generate LU decomposition of A and B
-	array = list() 
-	for i in range(0,maxROWA):
-		rowEntry = list()
-		for j in range(0,maxCOLA):
-			rowEntry.append((A[i][j]))
-		array.append(rowEntry)
+	if(maxROWA != maxCOLA):
+		print "Inverse can't be generated for A"
+	else:
+		array = list() 
+		for i in range(0,maxROWA):
+			rowEntry = list()
+			for j in range(0,maxCOLA):
+				rowEntry.append((A[i][j]))
+			array.append(rowEntry)
 
-	inv = numpy.linalg.inv(array)
-	fname =   str(maxROWA) + "_" + str(maxCOLA) + "_" + file7
-	f = open(fname, 'w')
-	f.write(str(maxROWA)+" "+str(maxCOLA))
-	f.write("\n")
-	f.write(str(inv))
-	f.write("\n")
+		P,L,U = scipy.linalg.lu(array)
+		fname =   str(maxROWA) + "_" + str(maxCOLA) + "_" + file7
+		f = open(fname, 'w')
+		f.write(str(maxROWA)+" "+str(maxCOLA))
+		f.write("\n")
+		f.write(str(P))
+		f.write("\n")
+		f.write(str(L))
+		f.write("\n")
+		f.write(str(U))
+		f.write("\n")
 
-	array = list() 
-	for i in range(0,maxROWB):
-		rowEntry = list()
-		for j in range(0,maxCOLB):
-			rowEntry.append((B[i][j]))
-		array.append(rowEntry)
+		array = list() 
+		for i in range(0,maxROWB):
+			rowEntry = list()
+			for j in range(0,maxCOLB):
+				rowEntry.append((B[i][j]))
+			array.append(rowEntry)
 
-	inv = numpy.linalg.inv(array)
-	fname =   str(maxROWB) + "_" + str(maxCOLB) + "_" + file8
-	f = open(fname, 'w')
-	f.write(str(maxROWB)+" "+str(maxCOLB))
-	f.write("\n")
-	f.write(str(inv))
-	f.write("\n")
+		P,L,U = scipy.linalg.lu(array)
+		fname =   str(maxROWB) + "_" + str(maxCOLB) + "_" + file8
+		f = open(fname, 'w')
+		f.write(str(maxROWB)+" "+str(maxCOLB))
+		f.write("\n")
+		f.write(str(L))
+		f.write("\n")
+		f.write(str(U))
+		f.write("\n")
+		f.write(str(P))
+		f.write("\n")
 
 if __name__ == "__main__":
     main()
