@@ -1,5 +1,11 @@
 package org.matrix.common;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.util.StringTokenizer;
+
+
 //This is just an abstact class
 //See concrete class like MatrixSeq
 public abstract class Matrix {
@@ -15,6 +21,40 @@ public abstract class Matrix {
 	//
 	//Constructor
 	//
+	public Matrix(String filename) {
+
+		try (BufferedReader br = new BufferedReader(new FileReader(new File(filename)))) {
+		    String line=null;
+		    int rows=0;
+		    int columns=0;
+		    StringTokenizer st = null;
+    		try {
+			    if((line = br.readLine()) != null) {
+			    	st = new StringTokenizer(line, " ");	
+			    	rows = Integer.parseInt(st.nextToken());
+			    	columns = Integer.parseInt(st.nextToken());
+			    }
+				matrix = new double[rows][columns];
+			    int i=0;
+			    while((line = br.readLine()) != null) {
+			    	st = new StringTokenizer(line, " ");
+			    	int j=0;
+			    	while(st.hasMoreTokens() && j < columns) {
+			    			matrix[i][j] = Double.parseDouble(st.nextToken().trim());
+			    			j++;
+			    	}
+			    	i++;
+			    }
+			    br.close();
+	    	} catch ( Exception e) {
+	    			e.printStackTrace();
+	    			br.close();
+	    	}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public Matrix(int rows, int columns) {
 		matrix = new double[rows][columns];
 	}
@@ -42,6 +82,12 @@ public abstract class Matrix {
 			sb.append("\n");
 		}
 		return sb.toString();
+	}
+	
+	public static int flipOdd(int i) {
+		if((i % 2) == 0) return 1;
+		else 
+			return -1;
 	}
 	
 	@Override
@@ -148,6 +194,26 @@ public abstract class Matrix {
 		} else {
 			return false;
 		}
+	}
+	
+	public boolean setSubMatrix(int i, int j, Matrix sub) {
+		//Todo check if rows and columns don't go over
+		int subrow=i;
+		
+		for(int k=0; k<sub.getNumRows();k++) {
+				int subcol=j;
+				for(int m=0; m<sub.getNumColumns();m++) {
+					if(subcol <getNumColumns() && subrow < getNumRows()) {
+					    System.out.println("Successfully set subcol: " + subcol + " and subrow " + subrow + " for matrix\n" + sub.toString());
+					    matrix[subrow][subcol] = sub.getElem(k, m);
+					    subcol++;
+					} else {
+						System.out.println("COULDNT set row: " + subrow + " or subcol: " + subcol + " for matrix \n" + sub.toString());
+					}
+				}
+				subrow++;
+		}
+		return true;
 	}
 
 	//

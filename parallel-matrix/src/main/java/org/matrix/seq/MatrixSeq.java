@@ -1,6 +1,8 @@
 package org.matrix.seq;
 
 import org.matrix.common.*;
+import org.matrix.parallel.DeterminantParallel;
+import org.matrix.parallel.MultParallel;
 
 //This is concrete class for MatrixSequential Algorithms that extens abstact class Matrix
 public class MatrixSeq extends Matrix {
@@ -16,6 +18,16 @@ public class MatrixSeq extends Matrix {
 		this.mOpMult = new MultSeq();
 	}
 	
+	public MatrixSeq(String filename) {
+		super(filename);
+		this.mOpAdd = new AddSeq();
+		this.mOpDeterminant = new DeterminantParallel();
+		this.mOpInverse = new InverseSeq();
+		this.mOpLinearSolver = new LinearSolverSeq();
+		this.mOpLUDecompose = new LUDecomposeSeq();
+		this.mOpMult = new MultParallel(3);
+	}
+	
 	public MatrixSeq(int rows, int columns, boolean zerod, int max){
 		super(rows,columns,zerod,max);
 		this.mOpAdd = new AddSeq();
@@ -26,12 +38,6 @@ public class MatrixSeq extends Matrix {
 		this.mOpMult = new MultSeq();
 	}
 
-	public static int flipOdd(int i) {
-		if((i % 2) == 0) return 1;
-		else 
-			return -1;
-	}
-	
 	
 	public Matrix adjoint() {
 		Matrix result = ((MatrixSeq) this.cofactor()).transpose();
@@ -76,7 +82,7 @@ public class MatrixSeq extends Matrix {
 	}
 	
 	public Matrix cofactor() {
-		MatrixSeq subMat = new MatrixSeq((getNumRows()-1),(getNumColumns()-1),true,0);
+		MatrixSeq subMat = new MatrixSeq((getNumRows()-1),(getNumColumns()-1));
 		MatrixSeq cofactorResult = new MatrixSeq(getNumRows(),getNumColumns(),true,0);
 		for(int i=0; i<getNumRows(); i++) {
 			for(int j=0; j<getNumColumns(); j++) {
