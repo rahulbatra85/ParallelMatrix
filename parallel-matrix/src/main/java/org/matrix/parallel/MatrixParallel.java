@@ -16,6 +16,7 @@ import org.matrix.seq.DeterminantSeq;
 public class MatrixParallel extends Matrix {
 	
 	public static ExecutorService threadPool = Executors.newCachedThreadPool();
+	int numThreads = 4;
 
 	
 	public MatrixParallel(String filename) {
@@ -25,7 +26,7 @@ public class MatrixParallel extends Matrix {
 		//this.mOpInverse = new InverseSeq();
 		//this.mOpLinearSolver = new LinearSolverSeq();
 		//this.mOpLUDecompose = new LUDecomposeSeq();
-		this.mOpMult = new MultParallel(3);
+		this.mOpMult = new MultParallel(numThreads);
 	}
 	
 	public MatrixParallel(int rows, int columns) {
@@ -35,7 +36,7 @@ public class MatrixParallel extends Matrix {
 		//this.mOpInverse = new InverseSeq();
 		//this.mOpLinearSolver = new LinearSolverSeq();
 		//this.mOpLUDecompose = new LUDecomposeSeq();
-		this.mOpMult = new MultParallel(3);
+		this.mOpMult = new MultParallel(numThreads);
 	}
 	
 	public MatrixParallel(int rows, int columns, boolean zerod, int max){
@@ -45,7 +46,7 @@ public class MatrixParallel extends Matrix {
 		//this.mOpInverse = new InverseSeq();
 		//this.mOpLinearSolver = new LinearSolverSeq();
 		//this.mOpLUDecompose = new LUDecomposeSeq();
-		this.mOpMult = new MultParallel(3);
+		this.mOpMult = new MultParallel(numThreads);
 	}
 
 	public Matrix scalarMultiply(double scalar) {
@@ -100,24 +101,28 @@ public class MatrixParallel extends Matrix {
 	
 	public Matrix createSubMatrixRange(int includeStartRow,int includeEndRow, int includeStartCol, int includeEndCol) {	   
 	    int row = -1;
-	    System.out.println("This matrix: \n" + this.toString());
-	    Matrix result = new MatrixSeq((includeEndRow-includeStartRow+1),(includeEndCol-includeStartCol+1));
+	    //System.out.println("This matrix: \n" + this.toString());
+	    Matrix result = new MatrixParallel((includeEndRow-includeStartRow+1),(includeEndCol-includeStartCol+1));
 	    for (int i=0;i<getNumRows();i++) {
 	        if (i<includeStartRow || i>(includeEndRow+1)) {
-	        	System.out.println("Skipping row: " + i);
+	        	//System.out.println("Skipping row: " + i);
 	            continue;
 	        }
 	            row++;
 	            int col = -1;
 	        for (int j=0;j<getNumColumns();j++) {
 	            if (j<includeStartCol || j>(includeEndCol+1))	{
-	            	System.out.println("Skipping row: " + i + " col: " + j);
+	            	//System.out.println("Skipping row: " + i + " col: " + j);
 	                continue;
 	            }
-	            result.setElem(row, ++col, matrix[i][j]);
+	            if(i>=getNumRows() || j>=getNumColumns()) {
+	            	result.setElem(row,++col, matrix[i][j]);
+	            } else {
+	                result.setElem(row, ++col, matrix[i][j]);
+	            }
 	        }
 	    }
-	    System.out.println("Result:\n" + result.toString());
+	    //System.out.println("Result:\n" + result.toString());
 	    return result;
 	}
 	

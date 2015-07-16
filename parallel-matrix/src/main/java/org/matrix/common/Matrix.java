@@ -137,6 +137,10 @@ public abstract class Matrix {
 		}
 	}
 	
+	public void addToElem(int i, int j, double value) {
+		matrix[i][j] = matrix[i][j] + value;
+	}
+	
 	//Solves the linear system consisting of this matrix and vector B
 	//Returns null if no solution is found
 	//Otherwise, returns vector solution x in equation(Ax=B) 
