@@ -178,14 +178,12 @@ public class MatrixParallelTest {
 
 	@Test
 	public void testMultiply() {
-		//Matrix matrixResult2 = m1.multiply(m2);
-		//String expected = "0.0 0.0 0.0 0.0 \n0.0 14.0 13.0 17.0 \n0.0 28.0 26.0 34.0 \n0.0 42.0 39.0 51.0 \n";
-		//System.out.println("Expected:\n:" + expected + " result:\n" + matrixResult2);
-		Matrix large1 = new MatrixParallel(5,5,false,10);
-		Matrix large2 = new MatrixParallel(5,5,false,5);
+		Matrix large1 = new MatrixParallel(29,25,false,10);
+		Matrix large2 = new MatrixParallel(25,27,false,5);
 		Matrix matrixResult = large1.multiply(large2);
-		//String expected = "0.0 0.0 0.0 0.0 \n0.0 14.0 13.0 17.0 \n0.0 28.0 26.0 34.0 \n0.0 42.0 39.0 51.0 \n";
-		//assertEquals(matrixResult.toString(),expected);
+		Matrix expected = new MatrixParallel("C:\\Users\\Amy\\git\\ParallelMatrix\\parallel-matrix\\src\\test\\resources\\28_28_MULT_AR29C25_BR25C29");
+        // to use this test, updated the file path.
+//        assertTrue(matrixResult.equals(expected));
 	}
 	
 	@Test
