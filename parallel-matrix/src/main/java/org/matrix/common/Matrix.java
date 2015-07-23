@@ -1,15 +1,13 @@
 package org.matrix.common;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 
 //This is just an abstact class
 //See concrete class like MatrixSeq
 public abstract class Matrix {
-	protected double[][] matrix;
+	public double[][] matrix;
 	
 	protected IfaceAdd mOpAdd;
 	protected IfaceMult mOpMult;
@@ -247,6 +245,40 @@ public abstract class Matrix {
 		
 	public boolean isSquare() {
 		return (getNumRows() == getNumColumns());
+	}
+	
+	public void writeMatrixToFile(String name) {
+		String inrows = null;
+		String incols = null;
+		try {
+			inrows = Integer.toString(getNumRows());
+			incols = Integer.toString(getNumColumns());			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		int rows= getNumRows();
+		int cols= getNumColumns();
+        try {
+			File fout = new File(inrows + "_" + incols + "_" + name);
+			FileOutputStream fos = new FileOutputStream(fout);
+		 
+			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
+		 	bw.write(rows + " " + cols );
+		 	bw.newLine();
+		 	StringBuilder sb = null;
+		 	Random generator = new Random(System.currentTimeMillis());
+		 	for(int j = 0; j < rows; j++) {
+		 		sb = new StringBuilder();
+				for (int i = 0; i < cols; i++) {
+					sb.append(matrix[j][i] + " ");
+				}
+				bw.write(sb.toString().trim());
+				bw.newLine();
+		 	}
+			bw.close();	
+		} catch(Exception e) {
+
+		}
 	}
 	
 }

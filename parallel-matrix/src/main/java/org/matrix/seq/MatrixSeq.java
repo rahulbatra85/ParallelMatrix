@@ -25,7 +25,7 @@ public class MatrixSeq extends Matrix {
 		this.mOpInverse = new InverseSeq();
 		this.mOpLinearSolver = new LinearSolverSeq();
 		this.mOpLUDecompose = new LUDecomposeSeq();
-		this.mOpMult = new MultParallel(3);
+		this.mOpMult = new MultSeq();
 	}
 	
 	public MatrixSeq(int rows, int columns, boolean zerod, int max){

@@ -5,7 +5,8 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.matrix.common.Matrix;
-import org.matrix.seq.MatrixSeq;
+import java.io.*;
+import java.util.*;
 
 public class MatrixParallelTest {
 
@@ -179,11 +180,26 @@ public class MatrixParallelTest {
 	@Test
 	public void testMultiply() {
 		Matrix large1 = new MatrixParallel(29,25,false,10);
-		Matrix large2 = new MatrixParallel(25,27,false,5);
+		Matrix large2 = new MatrixParallel(25,29,false,5);
 		Matrix matrixResult = large1.multiply(large2);
-		Matrix expected = new MatrixParallel("C:\\Users\\Amy\\git\\ParallelMatrix\\parallel-matrix\\src\\test\\resources\\28_28_MULT_AR29C25_BR25C29");
+//		Matrix expected = new MatrixParallel("C:\\Users\\Amy\\git\\ParallelMatrix\\parallel-matrix\\src\\test\\resources\\28_28_MULT_AR29C25_BR25C29");
         // to use this test, updated the file path.
-//        assertTrue(matrixResult.equals(expected));
+//        assertTrue(matrixResult.toString().equals(expected.toString()));
+	}
+	@Test
+	public void timeMultiplyBlocksThreaded() {
+/*		Matrix large1 = new MatrixParallel("C:\\Users\\Amy\\git\\ParallelMatrix\\parallel-matrix\\src\\test\\resources\\1000_1000_A");
+		Matrix large2 = new MatrixParallel("C:\\Users\\Amy\\git\\ParallelMatrix\\parallel-matrix\\src\\test\\resources\\1000_1000_B");
+		Matrix expected = new MatrixParallel("C:\\Users\\Amy\\git\\ParallelMatrix\\parallel-matrix\\src\\test\\resources\\1000_1000_A_B_MULT");
+		long start = System.currentTimeMillis();
+		Matrix matrixResult = large1.multiply(large2);
+		long end = System.currentTimeMillis();
+		long timer = end-start;
+		System.out.println("The time for parallel block multiply is: " + timer);
+		matrixResult.writeMatrixToFile("MULT1000A1000B");
+		System.out.println("Result:\n" + matrixResult.toString());
+		assertTrue(matrixResult.toString().trim().equals(expected.toString().trim()));
+*/
 	}
 	
 	@Test

@@ -54,13 +54,13 @@ public class MultParallel implements IfaceMult,Callable<Matrix>{
 		if(A.getNumColumns() != B.getNumRows()){
 			return null;
 		}
-		System.out.println("A:\n" + A.toString() + "B:\n" + B.toString());
+		//System.out.println("A:\n" + A.toString() + "B:\n" + B.toString());
 		
 		int numAR = A.getNumRows();
 		int numBC = B.getNumColumns();
 		int numAC = A.getNumColumns();
 		int numBR = B.getNumRows();
-		System.out.println("The final matrix is: " + numAR + " rows and: " + numBC + " columns");
+		//System.out.println("The final matrix is: " + numAR + " rows and: " + numBC + " columns");
 		int divisions = (int)Math.sqrt(numThreads);
 //		System.out.println("Divisions: " + divisions + " Num threads is: " + numThreads);
 		int partAcolsBrows = (int)Math.ceil((double)numAC/divisions);
@@ -110,8 +110,8 @@ public class MultParallel implements IfaceMult,Callable<Matrix>{
 		        	    subMatA[i][j] = (MatrixParallel)(threadVals.get(element)).get();
 		        	    element++;
 		        	    subMatB[i][j] = (MatrixParallel)(threadVals.get(element)).get();
-		        	    System.out.println("subresultA:\n" + subMatA[i][j].toString());
-		                System.out.println("subresultB:\n" + subMatB[i][j].toString());
+		        	    //System.out.println("subresultA:\n" + subMatA[i][j].toString());
+		                //System.out.println("subresultB:\n" + subMatB[i][j].toString());
 		        		int row = 0;
 		                for(int k=(partArows*i);k<((partArows*i)+partArows);k++) {
 			        		int col = 0;
@@ -136,8 +136,8 @@ public class MultParallel implements IfaceMult,Callable<Matrix>{
 			}
 			divrows++;
 	    }
-        System.out.println("Final\n" + (C.createSubMatrixRange(0,numAR-1,0,numBC-1)).toString());
-        System.out.println("Rows final: " + (numAR-1) + " Columns final: " + (numBC-1));
+        //System.out.println("Final\n" + (C.createSubMatrixRange(0,numAR-1,0,numBC-1)).toString());
+        //System.out.println("Rows final: " + (numAR-1) + " Columns final: " + (numBC-1));
 		return C.createSubMatrixRange(0,numAR-1,0,numBC-1);
 	}
 
