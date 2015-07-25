@@ -26,7 +26,7 @@ public class MatrixParallel extends Matrix {
 		//this.mOpInverse = new InverseSeq();
 		//this.mOpLinearSolver = new LinearSolverSeq();
 		//this.mOpLUDecompose = new LUDecomposeSeq();
-		this.mOpMult = new MultParallel(numThreads);
+		this.mOpMult = new MultParallel3(8);
 	}
 	
 	public MatrixParallel(int rows, int columns) {
@@ -36,7 +36,7 @@ public class MatrixParallel extends Matrix {
 		//this.mOpInverse = new InverseSeq();
 		//this.mOpLinearSolver = new LinearSolverSeq();
 		//this.mOpLUDecompose = new LUDecomposeSeq();
-		this.mOpMult = new MultParallel(numThreads);
+		this.mOpMult = new MultParallel3(8);
 	}
 	
 	public MatrixParallel(int rows, int columns, boolean zerod, int max){
@@ -46,7 +46,7 @@ public class MatrixParallel extends Matrix {
 		//this.mOpInverse = new InverseSeq();
 		//this.mOpLinearSolver = new LinearSolverSeq();
 		//this.mOpLUDecompose = new LUDecomposeSeq();
-		this.mOpMult = new MultParallel(numThreads);
+		this.mOpMult = new MultParallel3(8);
 	}
 
 	public Matrix scalarMultiply(double scalar) {

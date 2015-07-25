@@ -170,7 +170,7 @@ public class MatrixSeqTest {
 	
 	@Test
 	public void testTimedMultiply() {
-/*		Matrix large1 = new MatrixSeq("C:\\Users\\Amy\\git\\ParallelMatrix\\parallel-matrix\\src\\test\\resources\\1000_1000_A");
+		Matrix large1 = new MatrixSeq("C:\\Users\\Amy\\git\\ParallelMatrix\\parallel-matrix\\src\\test\\resources\\1000_1000_A");
 		Matrix large2 = new MatrixSeq("C:\\Users\\Amy\\git\\ParallelMatrix\\parallel-matrix\\src\\test\\resources\\1000_1000_B");
 		Matrix expected = new MatrixSeq("C:\\Users\\Amy\\git\\ParallelMatrix\\parallel-matrix\\src\\test\\resources\\1000_1000_A_B_MULT");
 		long start = System.currentTimeMillis();
@@ -179,7 +179,7 @@ public class MatrixSeqTest {
 		long end = System.currentTimeMillis();
 		long timer = end-start;
 		System.out.println("The time for sequential timed multiply is: " + timer);
-		assertTrue(matrixResult.toString().trim().equals(expected.toString().trim()));*/
+		assertTrue(matrixResult.toString().trim().equals(expected.toString().trim()));
 	}
 	
 	@Test

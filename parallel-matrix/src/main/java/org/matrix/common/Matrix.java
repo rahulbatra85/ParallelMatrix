@@ -206,11 +206,11 @@ public abstract class Matrix {
 				int subcol=j;
 				for(int m=0; m<sub.getNumColumns();m++) {
 					if(subcol <getNumColumns() && subrow < getNumRows()) {
-					    System.out.println("Successfully set subcol: " + subcol + " and subrow " + subrow + " for matrix\n" + sub.toString());
+					    //System.out.println("Successfully set subcol: " + subcol + " and subrow " + subrow + " for matrix\n" + sub.toString());
 					    matrix[subrow][subcol] = sub.getElem(k, m);
 					    subcol++;
 					} else {
-						System.out.println("COULDNT set row: " + subrow + " or subcol: " + subcol + " for matrix \n" + sub.toString());
+						//System.out.println("COULDNT set row: " + subrow + " or subcol: " + subcol + " for matrix \n" + sub.toString());
 					}
 				}
 				subrow++;
