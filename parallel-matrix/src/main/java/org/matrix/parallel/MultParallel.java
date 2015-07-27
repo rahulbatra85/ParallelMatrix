@@ -16,8 +16,8 @@ public class MultParallel implements IfaceMult,Callable<Matrix>{
 	Matrix A;
 	Matrix B;
 	
-    public MultParallel(int numThreads) {
-		this.numThreads = numThreads;
+    public MultParallel() {
+		this.numThreads = 8;
 	}
     
     public MultParallel(Matrix A, Matrix B) {

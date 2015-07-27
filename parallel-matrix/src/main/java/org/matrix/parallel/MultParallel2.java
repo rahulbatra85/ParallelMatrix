@@ -21,8 +21,8 @@ public class MultParallel2 implements IfaceMult,Callable<Boolean> {
 	int startRowInResult;
 	int startColInResult;
 	
-    public MultParallel2(int numThreads) {
-		this.numThreads = 4;
+    public MultParallel2() {
+		this.numThreads = 8;
 	}
     
     public MultParallel2(Matrix A, Matrix B, MatrixParallel C, int startRowInResult, int startColInResult) {

@@ -1,6 +1,8 @@
 package org.matrix.parallel;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.matrix.common.Matrix;
@@ -8,6 +10,7 @@ import org.matrix.common.IfaceMult;
 
 
 public class MultParallel3 extends Thread implements IfaceMult {
+	public static ExecutorService threadPool = Executors.newFixedThreadPool(8);
 	public ReentrantLock resultLock;
 	Double[][][] cA;
 	Double[][][] cB;
@@ -16,7 +19,7 @@ public class MultParallel3 extends Thread implements IfaceMult {
 	int o;
 	Matrix endResult;
 	
-	public MultParallel3(int numThreads) {
+	public MultParallel3() {
 		super();
 		
 	}
@@ -63,7 +66,7 @@ public class MultParallel3 extends Thread implements IfaceMult {
 					cubeB[i][j][k] = B.matrix[k][j];
 				}
 				Thread s = new MultParallel3(cubeA,cubeB,length,i,j,resultLock,endResult);
-				s.start();
+				threadPool.submit(s);
 				threadlist.add(s);
 			}
 		}
