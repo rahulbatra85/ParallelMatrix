@@ -7,7 +7,7 @@ import java.util.*;
 //This is just an abstact class
 //See concrete class like MatrixSeq
 public abstract class Matrix {
-	public double[][] matrix;
+	volatile public double[][] matrix;
 	
 	protected IfaceAdd mOpAdd;
 	protected IfaceMult mOpMult;
@@ -96,6 +96,17 @@ public abstract class Matrix {
 	    Matrix otherMatrix = (Matrix)other;
 	    
 	    //todo
+	    for(int i=0; i<matrix.length; i++){
+	    	 for(int j=0; j<matrix[0].length; j++){
+	    		 double diff = Math.abs(matrix[i][j]) -otherMatrix.getElem(i, j);
+	    		 if(( diff > 0.00001)){	   
+	    			 System.out.println(i + "," + j + " don't match. "
+	    			 		+ matrix[i][j] + " " + otherMatrix.getElem(i, j));
+	    			 return false;
+	    		 }
+	    	 }
+	    }
+	    	 
 	    return true;
 	}
 
@@ -216,6 +227,27 @@ public abstract class Matrix {
 				subrow++;
 		}
 		return true;
+	}
+	
+	public void setAllElem(String elems){
+		String lines[] = elems.split("\\r?\\n");
+	    int rows=0;
+	    int columns=0;
+	    StringTokenizer st = null;
+	    
+    	st = new StringTokenizer(lines[0], " ");	
+    	rows = Integer.parseInt(st.nextToken());
+    	columns = Integer.parseInt(st.nextToken());
+	    
+    	matrix = new double[rows][columns];
+	    for(int i=1; i<lines.length; i++){	
+	    	st = new StringTokenizer(lines[i], " ");
+	    	int j = 0;
+	    	while(st.hasMoreTokens() && j < columns){
+	    		matrix[i-1][j] = Double.parseDouble(st.nextToken().trim());
+	    		j++;
+	    	}
+		}				
 	}
 
 	//
