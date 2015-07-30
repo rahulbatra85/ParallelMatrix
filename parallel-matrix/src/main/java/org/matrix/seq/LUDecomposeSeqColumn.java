@@ -3,7 +3,7 @@ package org.matrix.seq;
 import org.matrix.common.IfaceLUDecompose;
 import org.matrix.common.Matrix;
 
-public class LUDecomposeSeqRecursive implements IfaceLUDecompose {
+public class LUDecomposeSeqColumn implements IfaceLUDecompose {
 
 	@Override
 	public Matrix[] LUDecompose(Matrix A) {
@@ -11,15 +11,11 @@ public class LUDecomposeSeqRecursive implements IfaceLUDecompose {
 			return null;
 		}
 		int n = A.getNumRows();
-		
-		//Create L and U  matrix
-		MatrixSeq L = new MatrixSeq(n,n);
-		MatrixSeq U = new MatrixSeq(n,n);
-		
+				
 		//Permutation Matrix
-		MatrixSeq p = new MatrixSeq(n,n);
+		MatrixSeq p = new MatrixSeq(n,1);
 		for(int i=0; i<n; i++){
-			p.setElem(i, i, 1);
+			p.setElem(i, 0, i);
 		}
 		
 		//Recursive loop k=1 to n
@@ -38,18 +34,23 @@ public class LUDecomposeSeqRecursive implements IfaceLUDecompose {
 				return null;
 			}
 			
-			p.setElem(k, k, 0);
-			p.setElem(k, idx, 1);
-			p.setElem(idx, idx, 0);
-			p.setElem(idx, k, 1);
-			
-			//Exchange row
-			for(int i=0; i<n; i++){
-				double tmp = A.getElem(k, i);
-				double tmp1 = A.getElem(idx, i);
-				A.setElem(k, i, tmp1);
-				A.setElem(idx, i, tmp);
+			//Exchange rows if max pivot is another row
+			if(idx != k){
+				//Update pivot vector
+				double tmp = p.getElem(k, 0);
+				double tmp1 = p.getElem(idx, 0);
+				p.setElem(k, 0, tmp1);				
+				p.setElem(idx, 0, tmp);
+				
+				//Exchange row
+				for(int i=0; i<n; i++){
+					tmp = A.getElem(k, i);
+					tmp1 = A.getElem(idx, i);
+					A.setElem(k, i, tmp1);
+					A.setElem(idx, i, tmp);
+				}
 			}
+			
 			//Compute V
 			for(int i=k+1; i<n; i++){
 				A.setElem(i, k,  A.getElem(i, k)/A.getElem(k, k));
@@ -62,8 +63,8 @@ public class LUDecomposeSeqRecursive implements IfaceLUDecompose {
 			}
 		}
 		MatrixSeq[] ret = new MatrixSeq[2];
-		ret[0] = L;
-		ret[1] = p;
+		ret[0] = (MatrixSeq)A;
+		ret[1] = (MatrixSeq)p;
 		return ret;
 	}
 

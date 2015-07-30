@@ -13,20 +13,30 @@ import org.matrix.common.Matrix;
 
 class workerThreadSync{
 	static final ReentrantLock lock = new ReentrantLock();
+	final Condition pivotQ  = lock.newCondition(); 
 	final Condition divideQ  = lock.newCondition(); 
 	final Condition msQ  = lock.newCondition(); 
-	boolean msActive, dActive;
+	int mTaskActive;
+	boolean mSingular;
 	
 	workerThreadSync(){
-		msActive = false;
-		dActive = true;
+		mTaskActive = 0;
+		mSingular = false;
 	}
 	
-	public void waitMS(){
+	public void setSingular(boolean v){
+		mSingular = v;
+	}
+	
+	public boolean getSingular(){
+		return mSingular;
+	}
+		
+	public void waitPivot(){
 		lock.lock();
 		try {
-			while(!msActive){
-				msQ.await();
+			while(mTaskActive != 0 && mTaskActive != 4){
+				pivotQ.await();
 			}
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -36,10 +46,10 @@ class workerThreadSync{
 		}
 	}
 	
-	public void signalMS(){		
+	public void signalPivot(){		
 		lock.lock();
 		try {
-			msQ.signalAll();
+			pivotQ.signalAll();
 		} finally{
 			lock.unlock();
 		}
@@ -49,7 +59,7 @@ class workerThreadSync{
 	public void waitDivide(){
 		lock.lock();
 		try {
-			while(msActive){
+			while(mTaskActive != 1 && mTaskActive != 4){
 				divideQ.await();
 			}
 		} catch (InterruptedException e) {
@@ -69,24 +79,49 @@ class workerThreadSync{
 		}
 	}
 	
-	public void setMsActive(boolean v){
+	public void waitMS(){
 		lock.lock();
 		try {
-			msActive = v;
+			while(mTaskActive != 2 && mTaskActive != 4){
+				msQ.await();
+			}
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally{
+			lock.unlock();
+		}
+	}
+	
+	public void signalMS(){		
+		lock.lock();
+		try {
+			msQ.signalAll();
+		} finally{
+			lock.unlock();
+		}
+		
+	}
+		
+	public void setTaskActive(int v){
+		lock.lock();
+		try {
+			mTaskActive = v;
 		} finally{
 			lock.unlock();
 		}
 	}	
 }
 
-class workerThread implements Runnable{
-	Matrix A;
+class workerThread1 implements Runnable{
+	Matrix A, p;
 	int tid, numT, type;
 	workerThreadSync wts;
 	CyclicBarrier barrier;
 	
-	workerThread(Matrix A, int tid, int numT, int type, workerThreadSync wts, CyclicBarrier b){
+	workerThread1(Matrix A, Matrix p, int tid, int numT, int type, workerThreadSync wts, CyclicBarrier b){
 		this.A = A;
+		this.p = p;
 		this.tid = tid;
 		this.numT = numT;
 		this.type = type;
@@ -95,19 +130,80 @@ class workerThread implements Runnable{
 	}
 	
 	@Override
-	public void run() {
-		//Divide thread
+	public void run() {	
 		if(type == 0){
-			divide();
-		} else{
-			ms();
-		}		
+			ps(); //pivot-search
+		} else if(type ==1){
+			divide(); //divide
+		} else {
+			ms(); //multiply-subtract
+		}
+	}
+	
+	public void ps(){
+		int k = 0;
+		int n = A.getNumRows();
+		while(k<n){
+			//Do Pivoting
+			int idx=k;
+			double max = 0;
+			for(int i=k; i<n; i++){
+				if(Math.abs(A.getElem(i, k)) > max){
+					idx = i;
+					max = A.getElem(i, k);
+				}
+			}
+			//If pivot is zero, then matrix is singular
+			if(max == 0){
+				wts.setSingular(true);
+				k = n;
+				wts.setTaskActive(4);
+				wts.signalDivide();
+				wts.signalMS();
+			} else{
+			
+				//Exchange rows if max pivot is another row
+				if(idx != k){
+					//Update pivot vector
+					double tmp = p.getElem(k, 0);
+					double tmp1 = p.getElem(idx, 0);
+					p.setElem(k, 0, tmp1);				
+					p.setElem(idx, 0, tmp);
+				
+					//Exchange row
+					for(int i=0; i<n; i++){
+						tmp = A.getElem(k, i);
+						tmp1 = A.getElem(idx, i);
+						A.setElem(k, i, tmp1);
+						A.setElem(idx, i, tmp);
+					}
+				}
+			
+				//Barrier(Wait for all pivot threads to finish)
+				//\todo
+			
+				//Signal divide threads(if id=1)
+				if(tid == 1){
+					wts.setTaskActive(1);
+					wts.signalDivide();
+				}
+			
+				//Wait until signaled
+				wts.waitPivot();
+			
+				//Next iteration
+				k++;
+			}
+		}
 	}
 	
 	public void divide() {
 		int k = 0;
 		int n = A.getNumRows();
-		while (k<n){
+		//Initial Wait
+		wts.waitDivide();
+		
+		while (k<n && !wts.getSingular()){			
 			//Do division
 			double div = A.getElem(k, k);
 			for(int i=k+1; i<n; i++){
@@ -119,12 +215,13 @@ class workerThread implements Runnable{
 			
 			//Signal MS Threads(if id=1)
 			if(tid == 1){
-				wts.setMsActive(true);
+				wts.setTaskActive(2);
 				wts.signalMS();
 			}
 
+			//Wait
 			wts.waitDivide();
-									
+			
 			//Next iteration
 			k++;
 		}		
@@ -133,11 +230,10 @@ class workerThread implements Runnable{
 	public void ms(){
 		int k = 0;
 		int n = A.getNumRows();
-		while (k<n){
-			//Wait
-			wts.waitMS();
-			
-			
+		//Wait
+		wts.waitMS();
+		
+		while (k<n && !wts.getSingular()){						
 			//Determine starting row for each thread
 			//based on kth iteration and thread-id(tid)
 			int b=0;
@@ -157,23 +253,33 @@ class workerThread implements Runnable{
 					double val = A.getElem(r, c) - A.getElem(r, k)*A.getElem(k, c);
 					A.setElem(r, c, val);
 				}
+				System.out.println("tid=" + tid + "k=" + k + "row=" + r);
 			}
 			
 			//Barrier(wait for all MS threads to finish)
-			try {
-				barrier.await();
+			try {								
+				barrier.await();				
 			} catch (InterruptedException | BrokenBarrierException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-						
-			k++;
 			
 			//Signal Divide Threads(if id=0)
-			if(tid == 1){
-				wts.setMsActive(false);
-				wts.signalDivide();
+			if(tid == 1){				
+				//Pivot thread won't signal waiting divide threads
+				if(k==n-1){
+					wts.setTaskActive(4);
+					wts.signalPivot();
+					wts.signalDivide();
+				} else{
+					wts.setTaskActive(0);
+					wts.signalPivot();
+				}
 			}
+
+			//Wait
+			wts.waitMS();
+			k++;
 		}
 	}
 }
@@ -187,13 +293,25 @@ public class LUDecomposeParallel1D implements IfaceLUDecompose {
 		if(!A.isSquare()){
 			return null;
 		}
-				
+	
+		//Object used to sync pivot-search, divide and multiply-subtract threads
 		workerThreadSync wts = new workerThreadSync();
-		CyclicBarrier dBarrier = new CyclicBarrier(1);
 		
+		MatrixParallel permM = new MatrixParallel(A.getNumRows(),1);
+		for(int i=0; i<permM.getNumRows(); i++){
+			permM.setElem(i, 0, i);
+		}
+		
+		//Create Pivot-Search Threads
+		//\todo use more than one thread
+		CyclicBarrier pBarrier = new CyclicBarrier(1);
+		workerThread1 p = new workerThread1(A,permM,1,1,0,wts,pBarrier);
+		Thread tp = new Thread(p);
+				
 		//Create Divide threads
 		//\todo create more than one
-		workerThread d = new workerThread(A, 1, 1, 0, wts, dBarrier);
+		CyclicBarrier dBarrier = new CyclicBarrier(1);
+		workerThread1 d = new workerThread1(A,permM,1,1,1, wts, dBarrier);
 		Thread td = new Thread(d);
 		
 		//Create MS threads
@@ -201,18 +319,23 @@ public class LUDecomposeParallel1D implements IfaceLUDecompose {
 		int n = A.getNumRows();
 		int numT = 0;
 		if(n<8){
-			numT = 1;
+			numT = 2;
 		} else{
-			numT = 1;
+			numT = 2;
 		}
 		
+		System.out.println("Number of threads: " + numT);
+		
 		Thread[] ts = new Thread[numT];
-		workerThread[] ms = new workerThread[numT];
+		workerThread1[] ms = new workerThread1[numT];
 		CyclicBarrier msBarrier = new CyclicBarrier(numT);		
 		for(int i=0; i<numT; i++){
-			ms[i] = new workerThread(A, i+1, numT, 1, wts, msBarrier);
+			ms[i] = new workerThread1(A, permM, i+1, numT, 2, wts, msBarrier);
 			 ts[i] = new Thread(ms[i]);
 		}
+		
+		//Start Pivot Threads
+		tp.start();
 		
 		//Start Divide threads
 		td.start();
@@ -224,24 +347,25 @@ public class LUDecomposeParallel1D implements IfaceLUDecompose {
 		
 		//Join All threads
 		try {
+			tp.join();
 			td.join();
+			for(int i=0; i<numT; i++){
+				ts[i].join();
+			}
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		for(int i=0; i<numT; i++){
-			try {
-				ts[i].join();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		
-		
+							
 		// TODO Auto-generated method stub
-		return null;
+		MatrixParallel[] ret = new MatrixParallel[2];
+		ret[0] = (MatrixParallel)A;
+		ret[1] = (MatrixParallel)permM;
+		if(wts.getSingular()){
+			return null;
+		} else {
+			return ret;
+		}
 	}
 
 }
