@@ -7,6 +7,7 @@ import java.util.concurrent.Executors;
 
 import org.matrix.common.IfaceLUDecompose;
 import org.matrix.common.Matrix;
+import org.matrix.common.MatrixConfig;
 
 
 class workerThread implements Runnable{
@@ -132,16 +133,16 @@ public class LUDecomposeParallel1DCyclicColumn implements IfaceLUDecompose {
 		}
 				
 		//Create threads
-		//todo determine how many threads to use
+		MatrixConfig mc = MatrixConfig.getMatrixConfig();
 		int n = A.getNumRows();
 		int numT = 0;
-		if(n<8){
-			numT = 8;
+		if(n<mc.getMaxThreads()){
+			numT = n;
 		} else{
-			numT = 8;
+			numT = mc.getMaxThreads();
 		}
 		
-		System.out.println("Number of threads: " + numT);
+		//System.out.println("Number of threads: " + numT);
 		
 		Thread[] ts = new Thread[numT];
 		workerThread[] ms = new workerThread[numT];

@@ -7,6 +7,7 @@ import java.util.concurrent.Executors;
 
 import org.matrix.common.IfaceLUDecompose;
 import org.matrix.common.Matrix;
+import org.matrix.common.MatrixConfig;
 
 public class LUDecomposeParallel1DCyclicRow implements IfaceLUDecompose {
 public static ExecutorService threadPool = Executors.newCachedThreadPool();
@@ -27,16 +28,16 @@ public static ExecutorService threadPool = Executors.newCachedThreadPool();
 		}
 				
 		//Create threads
-		//todo determine how many threads to use
+		MatrixConfig mc = MatrixConfig.getMatrixConfig();
 		int n = A.getNumRows();
 		int numT = 0;
-		if(n<8){
-			numT = 4;
+		if(n<mc.getMaxThreads()){
+			numT = n;
 		} else{
-			numT = 4;
+			numT = mc.getMaxThreads();
 		}
 		
-		System.out.println("Number of threads: " + numT);
+		//System.out.println("Number of threads: " + numT);
 		
 		Thread[] ts = new Thread[numT];
 		workerThread[] ms = new workerThread[numT];

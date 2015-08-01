@@ -9,6 +9,7 @@ import java.util.Scanner;
 import org.junit.Before;
 import org.junit.Test;
 import org.matrix.common.Matrix;
+import org.matrix.common.MatrixConfig;
 import org.matrix.seq.LUDecomposeSeqColumn;
 import org.matrix.seq.MatrixSeq;
 
@@ -17,6 +18,9 @@ public class TestMatrixParallelLU {
 	
 	@Before
 	public void setUp() throws Exception {
+		MatrixConfig mc = MatrixConfig.getMatrixConfig();
+		mc.setMaxThreads(4);
+		mc.setMaxHWThreads(8);
 	}
 
 	String getFile(String fileName) {
@@ -86,9 +90,9 @@ public class TestMatrixParallelLU {
 	
 	@Test
 	public void testLUParallel1DRow(){
-		for(int i=256; i>0; i=i/2){
+		for(int i=2048; i>0; i=i/2){
 			String s = i + "_" + i;
-			System.out.println("START: Name=LUParallel1D, Dimension=" + s);
+			System.out.println("START: Name=LUParallel1DRow, Dimension=" + s);
 			String mstr = getFile(s+"_A");
 				
 			MatrixParallel orig = new MatrixParallel(i,i);
@@ -123,16 +127,16 @@ public class TestMatrixParallelLU {
 				System.out.println(LUMult.toString());
 			}
 			long t = end - start;
-			System.out.println("END: Name=LUParallel1D, Dimension=" + s + "Time(ms)="+t);
+			System.out.println("END: Name=LUParallel1DRow, Dimension=" + s + "Time(ms)="+t);
 			System.out.println();
 		}
 	}
 	
-	/*@Test
+	@Test
 	public void testLUParallel1DColumn(){
 		for(int i=2048; i>0; i=i/2){
 			String s = i + "_" + i;
-			System.out.println("START: Name=LUParallel1D, Dimension=" + s);
+			System.out.println("START: Name=LUParallel1DColumn, Dimension=" + s);
 			String mstr = getFile(s+"_A");
 				
 			MatrixParallel orig = new MatrixParallel(i,i);
@@ -152,7 +156,7 @@ public class TestMatrixParallelLU {
 				fail("LU decomposition on singular matrix or non-square matrix");
 			}
 				
-			/*MatrixSeq Ap = applyPermutation(orig,combLU[1]);
+			MatrixSeq Ap = applyPermutation(orig,combLU[1]);
 			MatrixSeq[] LU = getLU(combLU[0], true);
 			MatrixSeq LUMult = (MatrixSeq) LU[0].multiply(LU[1]);
 		
@@ -165,11 +169,11 @@ public class TestMatrixParallelLU {
 				System.out.println(Ap.toString());
 				System.out.println("MULTIPLIED LU");
 				System.out.println(LUMult.toString());
-			}*/
-	/*		long t = end - start;
+			}
+			long t = end - start;
 			System.out.println("END: Name=LUParallel1D, Dimension=" + s + "Time(ms)="+t);
 			System.out.println();
 		}
-	}*/
+	}
 	
 }
