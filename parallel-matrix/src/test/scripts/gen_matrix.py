@@ -18,53 +18,57 @@ maxROWA=10
 maxCOLA=10
 maxROWB=10
 maxCOLB=10
-maxROWA=3
-maxCOLA=3
-maxROWB=3
-maxCOLB=3
-
+maxROWA=4
+maxCOLA=4
+maxROWB=4
+maxCOLB=4
+maxDim=8192
 noFloat=1
 
 def main():
 
-	#Generate Matrix A
-	A = [[0 for col in range(maxCOLA)] for row in range(maxROWA)]
-	fname =  str(maxROWA) + "_" + str(maxCOLA) +  "_" + file1  
-	f = open(fname, 'w')
-	f.write(str(maxROWA)+" "+str(maxCOLA))
-	f.write("\n")
+	d = 1
+	while d < maxDim:
+		#Generate Matrix A
+		A = [[0 for col in range(d)] for row in range(d)]
+		fname =  str(d) + "_" + str(d) +  "_" + file1  
+		f = open(fname, 'w')
+		f.write(str(d)+" "+str(d))
+		f.write("\n")
 
-	for r in range(0,maxROWA):
-		for c in range(0,maxCOLA):
-			if noFloat > 0:
-				val = random.randint(0,10)
-			else:
-				val = random.uniform(0.0,1000000.0)
-			A[r][c] = val
-			f.write(str(val)+" ");
+		for r in range(0,d):
+			for c in range(0,d):
+				if noFloat > 0:
+					val = random.randint(0,10)
+				else:
+					val = random.uniform(0.0,1000000.0)
+				A[r][c] = val
+				f.write(str(val)+" ");
 		
-		f.write("\n");
+			f.write("\n");
 	
-	f.close();
+		f.close();
 
-	#Generate Matrix B
-	B = [[0 for col in range(maxCOLB)] for row in range(maxROWB)]
-	fname =  str(maxROWB) + "_" + str(maxCOLB) + "_" + file2 
-	f = open(fname, 'w')
-	f.write(str(maxROWA)+" "+str(maxCOLA))
-	f.write("\n")
+		#Generate Matrix B
+		B = [[0 for col in range(d)] for row in range(d)]
+		fname =  str(d) + "_" + str(d) + "_" + file2 
+		f = open(fname, 'w')
+		f.write(str(d)+" "+str(d))
+		f.write("\n")
 
-	for r in range(0,maxROWA):
-		for c in range(0,maxCOLA):
-			if noFloat > 0:
-				val = random.randint(0,10)
-			else:
-				val = random.uniform(0.0,1000000.0)
-			B[r][c] = val
-			f.write(str(val)+" ");
+		for r in range(0,d):
+			for c in range(0,d):
+				if noFloat > 0:
+					val = random.randint(0,10)
+				else:
+					val = random.uniform(0.0,1000000.0)
+				B[r][c] = val
+				f.write(str(val)+" ");
 		
-		f.write("\n");
-	f.close();
+			f.write("\n");
+		f.close();
+		
+		d = d*2
 
 	#Generate A+B
 	if (maxROWA != maxROWB) and (maxCOLA != maxCOLB):

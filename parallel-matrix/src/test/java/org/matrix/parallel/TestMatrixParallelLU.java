@@ -2,53 +2,174 @@ package org.matrix.parallel;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Scanner;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.matrix.common.Matrix;
-import org.matrix.seq.LUDecomposeSeqRecursive;
+import org.matrix.seq.LUDecomposeSeqColumn;
 import org.matrix.seq.MatrixSeq;
 
-public class TestMatrixParallelLU {
 
-	MatrixParallel m1,m2;
+public class TestMatrixParallelLU {
 	
 	@Before
 	public void setUp() throws Exception {
-		m1 = new MatrixParallel(3,3);
-		double[][] row = {{3,2,7},{2,3,1},{3,4,1}};
-		m1.setRow(row[0], 0);
-		m1.setRow(row[1], 1);
-		m1.setRow(row[2], 2);
-		
-		m2 = new MatrixParallel(3,3);
-		double[][] m = {{3,2,5},{7,6,3}, {9,1,7}};
-		m2.setRow(m[0], 0);
-		m2.setRow(m[1], 1);
-		m2.setRow(m[2], 2);
 	}
 
-	@Test
-	public void test() {
+	String getFile(String fileName) {
+		StringBuilder result = new StringBuilder("");
+			 
+		//Get file from resources folder
+		ClassLoader classLoader = getClass().getClassLoader();
+		File file = new File(classLoader.getResource(fileName).getFile());
+			 
+		try (Scanner scanner = new Scanner(file)) {
+			while (scanner.hasNextLine()) {
+				String line = scanner.nextLine();
+				result.append(line).append("\n");
+			}
+			 
+			scanner.close();
+		} catch (IOException e) {
+				e.printStackTrace();
+		}
+			 
+		return result.toString();		 
+	}
 		
-		m1.setOpLU(new LUDecomposeParallel1D());
-		Matrix[] LU = m1.LUDecompose();
-		System.out.println(m1.toString());
-		if(LU != null){
-			System.out.println(m1.toString());
-			System.out.println(LU[1].toString());
+	public MatrixSeq applyPermutation(Matrix A, Matrix p){
+		MatrixSeq Ap = new MatrixSeq(A.getNumRows(),A.getNumColumns());
+			
+		for(int i=0;i<A.getNumRows();i++){
+			int row = (int) p.getElem(i, 0);
+			for(int j=0;j<A.getNumColumns();j++){
+				Ap.setElem(i, j, A.getElem(row, j));
+			}
+		}
+			
+		return Ap;
+	}
+		
+	public MatrixSeq[] getLU(Matrix A, boolean isLDiag){
+		MatrixSeq L = new MatrixSeq(A.getNumRows(),A.getNumColumns());
+		MatrixSeq U =  new MatrixSeq(A.getNumRows(),A.getNumColumns());
+			
+		for(int i=0; i<A.getNumRows(); i++){
+			for(int j=0; j<A.getNumColumns(); j++){
+				if(i>j){
+					L.setElem(i, j, A.getElem(i, j));
+				} else if(j>i){
+					U.setElem(i, j, A.getElem(i, j));
+				} else{
+					if(isLDiag){
+						L.setElem(i, j, A.getElem(i, j));
+						U.setElem(i, j, 1);
+					} else{
+						U.setElem(i, j, A.getElem(i, j));
+						L.setElem(i, j, 1);
+					}
+				}
+			}
+		}
+						
+		MatrixSeq[] ret = new MatrixSeq[2];
+		ret[0] = L;
+		ret[1] = U;
+			
+		return ret;
+	}
+	
+	
+	
+	@Test
+	public void testLUParallel1DRow(){
+		for(int i=256; i>0; i=i/2){
+			String s = i + "_" + i;
+			System.out.println("START: Name=LUParallel1D, Dimension=" + s);
+			String mstr = getFile(s+"_A");
+				
+			MatrixParallel orig = new MatrixParallel(i,i);
+			orig.setAllElem(mstr);
+				
+			MatrixParallel m = new MatrixParallel(i,i);		
+			m.setAllElem(mstr);
+				
+			m.setOpLU(new LUDecomposeParallel1DCyclicRow());
+				
+			long start = System.currentTimeMillis();
+			Matrix[] combLU = m.LUDecompose();
+			long end = System.currentTimeMillis();
+				
+			if(combLU == null){
+				orig.toString();
+				fail("LU decomposition on singular matrix or non-square matrix");
+			}
+				
+			MatrixSeq Ap = applyPermutation(orig,combLU[1]);
+			MatrixSeq[] LU = getLU(combLU[0], true);
+			MatrixSeq LUMult = (MatrixSeq) LU[0].multiply(LU[1]);
+		
+			if(!Ap.equals(LUMult)){							
+				System.out.println();
+				System.out.println("LU DECOMPOSED");
+				System.out.println(LU[0].toString());
+				System.out.println(LU[1].toString());
+				System.out.println("PERMUTED ORIGNAL MATRIX");
+				System.out.println(Ap.toString());
+				System.out.println("MULTIPLIED LU");
+				System.out.println(LUMult.toString());
+			}
+			long t = end - start;
+			System.out.println("END: Name=LUParallel1D, Dimension=" + s + "Time(ms)="+t);
+			System.out.println();
 		}
 	}
 	
-	@Test
-	public void test1() {
+	/*@Test
+	public void testLUParallel1DColumn(){
+		for(int i=2048; i>0; i=i/2){
+			String s = i + "_" + i;
+			System.out.println("START: Name=LUParallel1D, Dimension=" + s);
+			String mstr = getFile(s+"_A");
+				
+			MatrixParallel orig = new MatrixParallel(i,i);
+			orig.setAllElem(mstr);
+				
+			MatrixParallel m = new MatrixParallel(i,i);		
+			m.setAllElem(mstr);
+				
+			m.setOpLU(new LUDecomposeParallel1DCyclicColumn());
+				
+			long start = System.currentTimeMillis();
+			Matrix[] combLU = m.LUDecompose();
+			long end = System.currentTimeMillis();
+				
+			if(combLU == null){
+				orig.toString();
+				fail("LU decomposition on singular matrix or non-square matrix");
+			}
+				
+			/*MatrixSeq Ap = applyPermutation(orig,combLU[1]);
+			MatrixSeq[] LU = getLU(combLU[0], true);
+			MatrixSeq LUMult = (MatrixSeq) LU[0].multiply(LU[1]);
 		
-		m2.setOpLU(new LUDecomposeParallel1D());
-		Matrix[] LU = m2.LUDecompose();
-		System.out.println(m2.toString());
-		if(LU != null){
-			System.out.println(m2.toString());
-			System.out.println(LU[1].toString());
+			if(!Ap.equals(LUMult)){							
+				System.out.println();
+				System.out.println("LU DECOMPOSED");
+				System.out.println(LU[0].toString());
+				System.out.println(LU[1].toString());
+				System.out.println("PERMUTED ORIGNAL MATRIX");
+				System.out.println(Ap.toString());
+				System.out.println("MULTIPLIED LU");
+				System.out.println(LUMult.toString());
+			}*/
+	/*		long t = end - start;
+			System.out.println("END: Name=LUParallel1D, Dimension=" + s + "Time(ms)="+t);
+			System.out.println();
 		}
-	}
-
+	}*/
+	
 }
