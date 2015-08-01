@@ -236,7 +236,11 @@ public abstract class Matrix {
 			return new double[0]; // need to fix this
 	}	
 	public double[] getColumn(int col) {
-		return matrix[col];
+		double[] result = new double[getNumColumns()];
+		for(int x=0; x<getNumRows(); x++) {
+			result[x] = matrix[x][col];
+		}
+		return result;
 	}
 	
 	public double getElem(int i, int j) {

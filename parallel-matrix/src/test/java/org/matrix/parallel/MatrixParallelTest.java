@@ -100,7 +100,7 @@ public class MatrixParallelTest {
 	@Test
 	public void testGetColumn() {
 		double[] colSample = {0,2,4,6};
-		double[] temp = m1.getRow(2);
+		double[] temp = m1.getColumn(2);
 		for(int i=0; i<temp.length; i++) {
 			assert(temp[i] == colSample[i]);
 		}

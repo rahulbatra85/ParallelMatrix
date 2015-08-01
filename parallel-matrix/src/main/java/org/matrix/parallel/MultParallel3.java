@@ -1,50 +1,42 @@
 package org.matrix.parallel;
 
-import java.util.ArrayList;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.locks.ReentrantLock;
 
 import org.matrix.common.Matrix;
 import org.matrix.common.IfaceMult;
 
 
-public class MultParallel3 extends Thread implements IfaceMult {
-	public static ExecutorService threadPool = Executors.newFixedThreadPool(8);
-	public ReentrantLock resultLock;
-	Double[][][] cA;
-	Double[][][] cB;
+public class MultParallel3 implements IfaceMult,Runnable {
+	public static ExecutorService threadPool = Executors.newFixedThreadPool(50);
+	double[] cA;
+	double[] cB;	
 	int m;
 	int n;
 	int o;
-	Matrix endResult;
+	static Matrix endResult;
 	
 	public MultParallel3() {
-		super();
-		
+		super();		
 	}
 	
-	public MultParallel3(Double[][][] cA,Double[][][]cB,int k, int i, int j,ReentrantLock lock,Matrix result) {
+	public MultParallel3(double[] cA,double[]cB,int k, int i, int j) {
 		super();
 		this.cA = cA;
 		this.cB = cB;
 		this.m = i;
 		this.n = j;
 		this.o = k;
-		this.resultLock = lock;
-		this.endResult = result;
-		
 	}
 	
 	public void run() {
 		Double thisValue = 0.0;
 		for(int p=0; p<o; p++) {
-			thisValue  = thisValue + cA[m][n][p] * cB[m][n][p];
+			thisValue  = thisValue + cA[p] * cB[p];
 		}
-		resultLock.lock();
 		endResult.setElem(m, n, thisValue);
-		resultLock.unlock();
-		
 	}
 
 
@@ -54,28 +46,12 @@ public class MultParallel3 extends Thread implements IfaceMult {
 				&& A.matrix.length != A.matrix[0].length) 
 			return null;
 		int length = A.matrix.length;
-		resultLock = new ReentrantLock();
-		endResult = new MatrixParallel(length,length,true, 1);
-		Double[][][] cubeA = new Double[length][length][length];
-		Double[][][] cubeB = new Double[length][length][length];
-		ArrayList<Thread> threadlist = new ArrayList<Thread>();
+		endResult = new MatrixParallel(length,length);
 		for (int i=0; i<length; i++) {
 			for(int j=0; j<length; j++) {
-				for(int k=0; k<length; k++) {
-					cubeA[i][j][k] = A.matrix[i][k];
-					cubeB[i][j][k] = B.matrix[k][j];
-				}
-				Thread s = new MultParallel3(cubeA,cubeB,length,i,j,resultLock,endResult);
+				MultParallel3 s = new MultParallel3(A.getRow(i),B.getColumn(j),length,i,j);
 				threadPool.submit(s);
-				threadlist.add(s);
 			}
-		}
-		try {
-			for(int i=0; i<threadlist.size(); i++) {
-				threadlist.get(i).join();
-			}
-		} catch (Exception e) {
-				e.printStackTrace();
 		}
 		return endResult;
 	}
