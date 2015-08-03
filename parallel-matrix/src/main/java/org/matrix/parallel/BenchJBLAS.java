@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.StringTokenizer;
 
+import org.jblas.Decompose;
 import org.jblas.DoubleMatrix;
 
 import Jama.Matrix;
@@ -95,5 +96,97 @@ public class BenchJBLAS {
 			end = System.currentTimeMillis();
 			time = end - start;
 			System.out.println("Time for JBLAS multiply 1000x1000 is: " + time);
+			
+//LU Decomp
+		    A = readJamaMatrixFromFile(".\\src\\test\\resources\\2_2_A");
+		    Decompose lucalc = new Decompose();
+			start = System.currentTimeMillis();
+			Decompose.LUDecomposition<DoubleMatrix> resultLu = lucalc.lu(A);
+			end = System.currentTimeMillis();
+			time = end - start;
+			System.out.println("Time for JBLAS LU 2x2 is: " + time);	
+
+		    A = readJamaMatrixFromFile(".\\src\\test\\resources\\4_4_A");
+		    //Decompose lucalc = new Decompose();
+			start = System.currentTimeMillis();
+			resultLu = lucalc.lu(A);
+			end = System.currentTimeMillis();
+			time = end - start;
+			System.out.println("Time for JBLAS LU 4x4 is: " + time);
+			
+		    A = readJamaMatrixFromFile(".\\src\\test\\resources\\8_8_A");
+			start = System.currentTimeMillis();
+			resultLu = lucalc.lu(A);
+			end = System.currentTimeMillis();
+			time = end - start;
+			System.out.println("Time for JBLAS LU 8x8 is: " + time);
+			
+		    A = readJamaMatrixFromFile(".\\src\\test\\resources\\16_16_A");
+		    //Decompose lucalc = new Decompose();
+			start = System.currentTimeMillis();
+			resultLu = lucalc.lu(A);
+			end = System.currentTimeMillis();
+			time = end - start;
+			System.out.println("Time for JBLAS LU 16x16 is: " + time);
+			
+		    A = readJamaMatrixFromFile(".\\src\\test\\resources\\32_32_A");
+			start = System.currentTimeMillis();
+			resultLu = lucalc.lu(A);
+			end = System.currentTimeMillis();
+			time = end - start;
+			System.out.println("Time for JBLAS LU 32x32 is: " + time);
+			
+		    A = readJamaMatrixFromFile(".\\src\\test\\resources\\64_64_A");
+		    //Decompose lucalc = new Decompose();
+			start = System.currentTimeMillis();
+			resultLu = lucalc.lu(A);
+			end = System.currentTimeMillis();
+			time = end - start;
+			System.out.println("Time for JBLAS LU 64x64 is: " + time);
+			
+		    A = readJamaMatrixFromFile(".\\src\\test\\resources\\128_128_A");
+			start = System.currentTimeMillis();
+			resultLu = lucalc.lu(A);
+			end = System.currentTimeMillis();
+			time = end - start;
+			System.out.println("Time for JBLAS LU 128x128 is: " + time);
+			
+		    A = readJamaMatrixFromFile(".\\src\\test\\resources\\256_256_A");
+		    //Decompose lucalc = new Decompose();
+			start = System.currentTimeMillis();
+			resultLu = lucalc.lu(A);
+			end = System.currentTimeMillis();
+			time = end - start;
+			System.out.println("Time for JBLAS LU 256x256 is: " + time);
+			
+		    A = readJamaMatrixFromFile(".\\src\\test\\resources\\512_512_A");
+			start = System.currentTimeMillis();
+			resultLu = lucalc.lu(A);
+			end = System.currentTimeMillis();
+			time = end - start;
+			System.out.println("Time for JBLAS LU 512x512 is: " + time);
+			
+		    A = readJamaMatrixFromFile(".\\src\\test\\resources\\1024_1024_A");
+		    //Decompose lucalc = new Decompose();
+			start = System.currentTimeMillis();
+			resultLu = lucalc.lu(A);
+			end = System.currentTimeMillis();
+			time = end - start;
+			System.out.println("Time for JBLAS LU 1024x1024 is: " + time);
+			
+		    A = readJamaMatrixFromFile(".\\src\\test\\resources\\2048_2048_A");
+			start = System.currentTimeMillis();
+			resultLu = lucalc.lu(A);
+			end = System.currentTimeMillis();
+			time = end - start;
+			System.out.println("Time for JBLAS LU 2048x2048 is: " + time);
+			
+		    A = readJamaMatrixFromFile(".\\src\\test\\resources\\4096_4096_A");
+			start = System.currentTimeMillis();
+			resultLu = lucalc.lu(A);
+			end = System.currentTimeMillis();
+			time = end - start;
+			System.out.println("Time for JBLAS LU 4096x4096 is: " + time);
+
 		  }
 }
