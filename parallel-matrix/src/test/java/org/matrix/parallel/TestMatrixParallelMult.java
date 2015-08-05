@@ -170,7 +170,7 @@ public class TestMatrixParallelMult {
 		long timer = end-start;
 		System.out.println("The time for parallel 1000x1000 DNS multiply is: " + timer);
 		assertTrue(matrixResult.toString().equals(expected.toString()));
-	}*/
+	}
 	
 	@Test
 	public void benchMultiplyBlocks2x2() {
@@ -314,9 +314,11 @@ public class TestMatrixParallelMult {
 		long end = System.currentTimeMillis();
 		long timer = end-start;
 		System.out.println("The time for parallel 4096x4096 block multiply is: " + timer);
-	}
+	}*/
+
+
 	
-	@Test
+/*	@Test
 	public void benchMultiplyDNS2x2() {
 		Matrix large1 = new MatrixParallel(".\\src\\test\\resources\\2_2_A");
 		large1.setOpMult(new MultParallel3());
@@ -446,8 +448,7 @@ public class TestMatrixParallelMult {
 		long end = System.currentTimeMillis();
 		long timer = end-start;
 		System.out.println("The time for parallel 2048x2048 DNS multiply is: " + timer);
-	}
-	
+	}*/
 	@Test
 	public void benchMultiplyDNS4096x4096() {
 		Matrix large1 = new MatrixParallel(".\\src\\test\\resources\\4096_4096_A");

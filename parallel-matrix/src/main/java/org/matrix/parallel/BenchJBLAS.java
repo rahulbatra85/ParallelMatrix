@@ -56,7 +56,7 @@ public class BenchJBLAS {
 			Long time = end - start;
 			System.out.println("Time for JBLAS multiply 10x10 is: " + time);
 			
-		    A = readJamaMatrixFromFile(".\\src\\test\\resources\\100_100_M1");
+/*		    A = readJamaMatrixFromFile(".\\src\\test\\resources\\100_100_M1");
 		    B = readJamaMatrixFromFile(".\\src\\test\\resources\\100_100_M2");
 			start = System.currentTimeMillis();
 			result = A.mmul(B);
@@ -95,7 +95,104 @@ public class BenchJBLAS {
 			result = A.mmul(B);
 			end = System.currentTimeMillis();
 			time = end - start;
-			System.out.println("Time for JBLAS multiply 1000x1000 is: " + time);
+			System.out.println("Time for JBLAS multiply 1000x1000 is: " + time);*/
+//Matrix Multiply x2
+		    A = readJamaMatrixFromFile(".\\src\\test\\resources\\2_2_A");
+		    B = readJamaMatrixFromFile(".\\src\\test\\resources\\2_2_B");
+			start = System.currentTimeMillis();
+			result = A.mmul(B);
+			end = System.currentTimeMillis();
+			time = end - start;
+			System.out.println("Time for JBLAS multiply 2x2 is: " + time);
+			
+		    A = readJamaMatrixFromFile(".\\src\\test\\resources\\4_4_A");
+		    B = readJamaMatrixFromFile(".\\src\\test\\resources\\4_4_B");
+			start = System.currentTimeMillis();
+			result = A.mmul(B);
+			end = System.currentTimeMillis();
+			time = end - start;
+			System.out.println("Time for JBLAS multiply 4x4 is: " + time);
+			
+		    A = readJamaMatrixFromFile(".\\src\\test\\resources\\8_8_A");
+		    B = readJamaMatrixFromFile(".\\src\\test\\resources\\8_8_A");
+			start = System.currentTimeMillis();
+			result = A.mmul(B);
+			end = System.currentTimeMillis();
+			time = end - start;
+			System.out.println("Time for JBLAS multiply 8x8 is: " + time);
+			
+		    A = readJamaMatrixFromFile(".\\src\\test\\resources\\16_16_A");
+		    B = readJamaMatrixFromFile(".\\src\\test\\resources\\16_16_A");
+			start = System.currentTimeMillis();
+			result = A.mmul(B);
+			end = System.currentTimeMillis();
+			time = end - start;
+			System.out.println("Time for JBLAS multiply 16x16 is: " + time);
+			
+		    A = readJamaMatrixFromFile(".\\src\\test\\resources\\32_32_A");
+		    B = readJamaMatrixFromFile(".\\src\\test\\resources\\32_32_A");
+			start = System.currentTimeMillis();
+			result = A.mmul(B);
+			end = System.currentTimeMillis();
+			time = end - start;
+			System.out.println("Time for JBLAS multiply 32x32 is: " + time);
+
+		    A = readJamaMatrixFromFile(".\\src\\test\\resources\\64_64_A");
+		    B = readJamaMatrixFromFile(".\\src\\test\\resources\\64_64_A");
+			start = System.currentTimeMillis();
+			result = A.mmul(B);
+			end = System.currentTimeMillis();
+			time = end - start;
+			System.out.println("Time for JBLAS multiply 64x64 is: " + time);
+
+		    A = readJamaMatrixFromFile(".\\src\\test\\resources\\128_128_A");
+		    B = readJamaMatrixFromFile(".\\src\\test\\resources\\128_128_A");
+			start = System.currentTimeMillis();
+			result = A.mmul(B);
+			end = System.currentTimeMillis();
+			time = end - start;
+			System.out.println("Time for JBLAS multiply 128x128 is: " + time);
+			
+		    A = readJamaMatrixFromFile(".\\src\\test\\resources\\256_256_A");
+		    B = readJamaMatrixFromFile(".\\src\\test\\resources\\256_256_A");
+			start = System.currentTimeMillis();
+			result = A.mmul(B);
+			end = System.currentTimeMillis();
+			time = end - start;
+			System.out.println("Time for JBLAS multiply 256x256 is: " + time);
+			
+		    A = readJamaMatrixFromFile(".\\src\\test\\resources\\512_512_A");
+		    B = readJamaMatrixFromFile(".\\src\\test\\resources\\512_512_A");
+			start = System.currentTimeMillis();
+			result = A.mmul(B);
+			end = System.currentTimeMillis();
+			time = end - start;
+			System.out.println("Time for JBLAS multiply 512x512 is: " + time);
+			
+		    A = readJamaMatrixFromFile(".\\src\\test\\resources\\1024_1024_A");
+		    B = readJamaMatrixFromFile(".\\src\\test\\resources\\1024_1024_A");
+			start = System.currentTimeMillis();
+			result = A.mmul(B);
+			end = System.currentTimeMillis();
+			time = end - start;
+			System.out.println("Time for JBLAS multiply 1024x1024 is: " + time);
+			
+		    A = readJamaMatrixFromFile(".\\src\\test\\resources\\2048_2048_A");
+		    B = readJamaMatrixFromFile(".\\src\\test\\resources\\2048_2048_A");
+			start = System.currentTimeMillis();
+			result = A.mmul(B);
+			end = System.currentTimeMillis();
+			time = end - start;
+			System.out.println("Time for JBLAS multiply 2048x2048 is: " + time);
+			
+		    A = readJamaMatrixFromFile(".\\src\\test\\resources\\4096_4096_A");
+		    B = readJamaMatrixFromFile(".\\src\\test\\resources\\4096_4096_A");
+			start = System.currentTimeMillis();
+			result = A.mmul(B);
+			end = System.currentTimeMillis();
+			time = end - start;
+			System.out.println("Time for JBLAS multiply 4096x4096 is: " + time);
+			
 			
 //LU Decomp
 		    A = readJamaMatrixFromFile(".\\src\\test\\resources\\2_2_A");

@@ -50,7 +50,6 @@ public class BenchJama {
 	
 	public static void main(String[] args) {
 		
-		//C:\Users\Amy\git\ParallelMatrix\parallel-matrix
 		Matrix matrix = readJamaMatrixFromFile(".\\src\\test\\resources\\10_10_A");
 		Matrix matrix2 = readJamaMatrixFromFile(".\\src\\test\\resources\\10_10_B");
 		Long start = System.currentTimeMillis();
@@ -99,6 +98,103 @@ public class BenchJama {
 		end = System.currentTimeMillis();
 		time = end - start;
 		System.out.println("Time for Jama multiply 1000x1000 is: " + time);
+		
+//Multiply x2 Benchmarks
+		matrix = readJamaMatrixFromFile(".\\src\\test\\resources\\2_2_A");
+		matrix2 = readJamaMatrixFromFile(".\\src\\test\\resources\\2_2_B");
+		start = System.currentTimeMillis();
+		result = matrix.times(matrix2);
+		end = System.currentTimeMillis();
+		time = end - start;
+		System.out.println("Time for Jama multiply 2x2 is: " + time);
+		
+		matrix = readJamaMatrixFromFile(".\\src\\test\\resources\\4_4_A");
+		matrix2 = readJamaMatrixFromFile(".\\src\\test\\resources\\4_4_B");
+		start = System.currentTimeMillis();
+		result = matrix.times(matrix2);
+		end = System.currentTimeMillis();
+		time = end - start;
+		System.out.println("Time for Jama multiply 4x4 is: " + time);
+		
+		matrix = readJamaMatrixFromFile(".\\src\\test\\resources\\8_8_A");
+		matrix2 = readJamaMatrixFromFile(".\\src\\test\\resources\\8_8_A");
+		start = System.currentTimeMillis();
+		result = matrix.times(matrix2);
+		end = System.currentTimeMillis();
+		time = end - start;
+		System.out.println("Time for Jama multiply 8x8 is: " + time);
+		
+		matrix = readJamaMatrixFromFile(".\\src\\test\\resources\\16_16_A");
+		matrix2 = readJamaMatrixFromFile(".\\src\\test\\resources\\16_16_A");
+		start = System.currentTimeMillis();
+		result = matrix.times(matrix2);
+		end = System.currentTimeMillis();
+		time = end - start;
+		System.out.println("Time for Jama multiply 16x16 is: " + time);
+		
+		matrix = readJamaMatrixFromFile(".\\src\\test\\resources\\32_32_A");
+		matrix2 = readJamaMatrixFromFile(".\\src\\test\\resources\\32_32_A");
+		start = System.currentTimeMillis();
+		result = matrix.times(matrix2);
+		end = System.currentTimeMillis();
+		time = end - start;
+		System.out.println("Time for Jama multiply 32x32 is: " + time);
+		
+		matrix = readJamaMatrixFromFile(".\\src\\test\\resources\\64_64_A");
+		matrix2 = readJamaMatrixFromFile(".\\src\\test\\resources\\64_64_A");
+		start = System.currentTimeMillis();
+		result = matrix.times(matrix2);
+		end = System.currentTimeMillis();
+		time = end - start;
+		System.out.println("Time for Jama multiply 64x64 is: " + time);
+		
+		matrix = readJamaMatrixFromFile(".\\src\\test\\resources\\128_128_A");
+		matrix2 = readJamaMatrixFromFile(".\\src\\test\\resources\\128_128_A");
+		start = System.currentTimeMillis();
+		result = matrix.times(matrix2);
+		end = System.currentTimeMillis();
+		time = end - start;
+		System.out.println("Time for Jama multiply 128x128 is: " + time);
+		
+		matrix = readJamaMatrixFromFile(".\\src\\test\\resources\\256_256_A");
+		matrix2 = readJamaMatrixFromFile(".\\src\\test\\resources\\256_256_A");
+		start = System.currentTimeMillis();
+		result = matrix.times(matrix2);
+		end = System.currentTimeMillis();
+		time = end - start;
+		System.out.println("Time for Jama multiply 256x256 is: " + time);
+		
+		matrix = readJamaMatrixFromFile(".\\src\\test\\resources\\512_512_A");
+		matrix2 = readJamaMatrixFromFile(".\\src\\test\\resources\\512_512_A");
+		start = System.currentTimeMillis();
+		result = matrix.times(matrix2);
+		end = System.currentTimeMillis();
+		time = end - start;
+		System.out.println("Time for Jama multiply 512x512 is: " + time);
+		
+		matrix = readJamaMatrixFromFile(".\\src\\test\\resources\\1024_1024_A");
+		matrix2 = readJamaMatrixFromFile(".\\src\\test\\resources\\1024_1024_A");
+		start = System.currentTimeMillis();
+		result = matrix.times(matrix2);
+		end = System.currentTimeMillis();
+		time = end - start;
+		System.out.println("Time for Jama multiply 1024x1024 is: " + time);
+		
+		matrix = readJamaMatrixFromFile(".\\src\\test\\resources\\2048_2048_A");
+		matrix2 = readJamaMatrixFromFile(".\\src\\test\\resources\\2048_2048_A");
+		start = System.currentTimeMillis();
+		result = matrix.times(matrix2);
+		end = System.currentTimeMillis();
+		time = end - start;
+		System.out.println("Time for Jama multiply 2048x2048 is: " + time);
+		
+		matrix = readJamaMatrixFromFile(".\\src\\test\\resources\\4096_4096_A");
+		matrix2 = readJamaMatrixFromFile(".\\src\\test\\resources\\4096_4096_A");
+		start = System.currentTimeMillis();
+		result = matrix.times(matrix2);
+		end = System.currentTimeMillis();
+		time = end - start;
+		System.out.println("Time for Jama multiply 1024x1024 is: " + time);
 		
 //LU Benchmarks
 		matrix = readJamaMatrixFromFile(".\\src\\test\\resources\\2_2_A");

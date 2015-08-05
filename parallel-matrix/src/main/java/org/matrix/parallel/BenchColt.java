@@ -58,7 +58,7 @@ public class BenchColt {
 		Long time = end - start;
 		System.out.println("Time for colt multiply 10x10 is: " + time);
 		
-		matrix = readColtMatrixFromFile(".\\src\\test\\resources\\100_100_M1");
+/*		matrix = readColtMatrixFromFile(".\\src\\test\\resources\\100_100_M1");
 		matrix2 = readColtMatrixFromFile(".\\src\\test\\resources\\100_100_M2");
 		algebra = new DenseDoubleAlgebra();
 		start = System.currentTimeMillis();
@@ -101,7 +101,116 @@ public class BenchColt {
 		result = algebra.mult(matrix,matrix2);
 		end = System.currentTimeMillis();
 		time = end - start;
-		System.out.println("Time for colt multiply 1000x1000 is: " + time);
+		System.out.println("Time for colt multiply 1000x1000 is: " + time);*/
+// Multiply x2 Benchmarks	
+		matrix = readColtMatrixFromFile(".\\src\\test\\resources\\2_2_A");
+		matrix2 = readColtMatrixFromFile(".\\src\\test\\resources\\2_2_B");
+		algebra = new DenseDoubleAlgebra();
+		 start = System.currentTimeMillis();
+		result = algebra.mult(matrix,matrix2);
+		end = System.currentTimeMillis();
+		time = end - start;
+		System.out.println("Time for colt multiply 2x2 is: " + time);
+		
+		matrix = readColtMatrixFromFile(".\\src\\test\\resources\\4_4_A");
+		matrix2 = readColtMatrixFromFile(".\\src\\test\\resources\\4_4_B");
+		algebra = new DenseDoubleAlgebra();
+		start = System.currentTimeMillis();
+		result = algebra.mult(matrix,matrix2);
+		end = System.currentTimeMillis();
+		time = end - start;
+		System.out.println("Time for colt multiply 4x4 is: " + time);
+
+		matrix = readColtMatrixFromFile(".\\src\\test\\resources\\8_8_A");
+		matrix2 = readColtMatrixFromFile(".\\src\\test\\resources\\8_8_A");
+		algebra = new DenseDoubleAlgebra();
+		 start = System.currentTimeMillis();
+		result = algebra.mult(matrix,matrix2);
+		end = System.currentTimeMillis();
+		time = end - start;
+		System.out.println("Time for colt multiply 8x8 is: " + time);
+		
+		matrix = readColtMatrixFromFile(".\\src\\test\\resources\\16_16_A");
+		matrix2 = readColtMatrixFromFile(".\\src\\test\\resources\\16_16_A");
+		algebra = new DenseDoubleAlgebra();
+		start = System.currentTimeMillis();
+		result = algebra.mult(matrix,matrix2);
+		end = System.currentTimeMillis();
+		time = end - start;
+		System.out.println("Time for colt multiply 16x16 is: " + time);
+		
+		matrix = readColtMatrixFromFile(".\\src\\test\\resources\\32_32_A");
+		matrix2 = readColtMatrixFromFile(".\\src\\test\\resources\\32_32_A");
+		algebra = new DenseDoubleAlgebra();
+		 start = System.currentTimeMillis();
+		result = algebra.mult(matrix,matrix2);
+		end = System.currentTimeMillis();
+		time = end - start;
+		System.out.println("Time for colt multiply 32x32 is: " + time);
+		
+		matrix = readColtMatrixFromFile(".\\src\\test\\resources\\64_64_A");
+		matrix2 = readColtMatrixFromFile(".\\src\\test\\resources\\64_64_A");
+		algebra = new DenseDoubleAlgebra();
+		start = System.currentTimeMillis();
+		result = algebra.mult(matrix,matrix2);
+		end = System.currentTimeMillis();
+		time = end - start;
+		System.out.println("Time for colt multiply 64x64 is: " + time);
+		
+		matrix = readColtMatrixFromFile(".\\src\\test\\resources\\128_128_A");
+		matrix2 = readColtMatrixFromFile(".\\src\\test\\resources\\128_128_A");
+		algebra = new DenseDoubleAlgebra();
+		 start = System.currentTimeMillis();
+		result = algebra.mult(matrix,matrix2);
+		end = System.currentTimeMillis();
+		time = end - start;
+		System.out.println("Time for colt multiply 128x128 is: " + time);
+		
+		matrix = readColtMatrixFromFile(".\\src\\test\\resources\\256_256_A");
+		matrix2 = readColtMatrixFromFile(".\\src\\test\\resources\\256_256_A");
+		algebra = new DenseDoubleAlgebra();
+		start = System.currentTimeMillis();
+		result = algebra.mult(matrix,matrix2);
+		end = System.currentTimeMillis();
+		time = end - start;
+		System.out.println("Time for colt multiply 256x256 is: " + time);
+		
+		matrix = readColtMatrixFromFile(".\\src\\test\\resources\\512_512_A");
+		matrix2 = readColtMatrixFromFile(".\\src\\test\\resources\\512_512_A");
+		algebra = new DenseDoubleAlgebra();
+		 start = System.currentTimeMillis();
+		result = algebra.mult(matrix,matrix2);
+		end = System.currentTimeMillis();
+		time = end - start;
+		System.out.println("Time for colt multiply 512x512 is: " + time);
+		
+		matrix = readColtMatrixFromFile(".\\src\\test\\resources\\1024_1024_A");
+		matrix2 = readColtMatrixFromFile(".\\src\\test\\resources\\1024_1024_A");
+		algebra = new DenseDoubleAlgebra();
+		start = System.currentTimeMillis();
+		result = algebra.mult(matrix,matrix2);
+		end = System.currentTimeMillis();
+		time = end - start;
+		System.out.println("Time for colt multiply 1024x1024 is: " + time);
+		
+		matrix = readColtMatrixFromFile(".\\src\\test\\resources\\2048_2048_A");
+		matrix2 = readColtMatrixFromFile(".\\src\\test\\resources\\2048_2048_A");
+		algebra = new DenseDoubleAlgebra();
+		 start = System.currentTimeMillis();
+		result = algebra.mult(matrix,matrix2);
+		end = System.currentTimeMillis();
+		time = end - start;
+		System.out.println("Time for colt multiply 2048x2048 is: " + time);
+		
+		matrix = readColtMatrixFromFile(".\\src\\test\\resources\\4096_4096_A");
+		matrix2 = readColtMatrixFromFile(".\\src\\test\\resources\\4096_4096_A");
+		algebra = new DenseDoubleAlgebra();
+		start = System.currentTimeMillis();
+		result = algebra.mult(matrix,matrix2);
+		end = System.currentTimeMillis();
+		time = end - start;
+		System.out.println("Time for colt multiply 4096x4096 is: " + time);
+		
 //LU Benchmarks
 		matrix = readColtMatrixFromFile(".\\src\\test\\resources\\2_2_A");
 		algebra = new DenseDoubleAlgebra();
