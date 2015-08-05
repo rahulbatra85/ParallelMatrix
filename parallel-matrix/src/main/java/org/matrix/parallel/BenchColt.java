@@ -58,7 +58,7 @@ public class BenchColt {
 		Long time = end - start;
 		System.out.println("Time for colt multiply 10x10 is: " + time);
 		
-/*		matrix = readColtMatrixFromFile(".\\src\\test\\resources\\100_100_M1");
+		matrix = readColtMatrixFromFile(".\\src\\test\\resources\\100_100_M1");
 		matrix2 = readColtMatrixFromFile(".\\src\\test\\resources\\100_100_M2");
 		algebra = new DenseDoubleAlgebra();
 		start = System.currentTimeMillis();
@@ -101,7 +101,7 @@ public class BenchColt {
 		result = algebra.mult(matrix,matrix2);
 		end = System.currentTimeMillis();
 		time = end - start;
-		System.out.println("Time for colt multiply 1000x1000 is: " + time);*/
+		System.out.println("Time for colt multiply 1000x1000 is: " + time);
 // Multiply x2 Benchmarks	
 		matrix = readColtMatrixFromFile(".\\src\\test\\resources\\2_2_A");
 		matrix2 = readColtMatrixFromFile(".\\src\\test\\resources\\2_2_B");

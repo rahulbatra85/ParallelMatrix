@@ -6,7 +6,7 @@ import org.matrix.common.Matrix;
 public class TestMatrixSeqMult {
 
 	
-/*	@Test
+	@Test
 	public void testTimed2x2MultSeq() {
 		Matrix large1 = new MatrixSeq(".\\src\\test\\resources\\2_2_A");
 		Matrix large2 = new MatrixSeq(".\\src\\test\\resources\\2_2_B");
@@ -125,7 +125,7 @@ public class TestMatrixSeqMult {
 		long end = System.currentTimeMillis();
 		long timer = end-start;
 		System.out.println("The time for sequential 2048x2048 timed multiply is: " + timer);
-	}*/
+	}
 	
 	@Test
 	public void testTimed4096x4096MultSeq() {

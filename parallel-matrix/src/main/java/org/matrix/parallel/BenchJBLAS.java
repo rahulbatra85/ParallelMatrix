@@ -56,7 +56,7 @@ public class BenchJBLAS {
 			Long time = end - start;
 			System.out.println("Time for JBLAS multiply 10x10 is: " + time);
 			
-/*		    A = readJamaMatrixFromFile(".\\src\\test\\resources\\100_100_M1");
+		    A = readJamaMatrixFromFile(".\\src\\test\\resources\\100_100_M1");
 		    B = readJamaMatrixFromFile(".\\src\\test\\resources\\100_100_M2");
 			start = System.currentTimeMillis();
 			result = A.mmul(B);
@@ -95,7 +95,7 @@ public class BenchJBLAS {
 			result = A.mmul(B);
 			end = System.currentTimeMillis();
 			time = end - start;
-			System.out.println("Time for JBLAS multiply 1000x1000 is: " + time);*/
+			System.out.println("Time for JBLAS multiply 1000x1000 is: " + time);
 //Matrix Multiply x2
 		    A = readJamaMatrixFromFile(".\\src\\test\\resources\\2_2_A");
 		    B = readJamaMatrixFromFile(".\\src\\test\\resources\\2_2_B");
