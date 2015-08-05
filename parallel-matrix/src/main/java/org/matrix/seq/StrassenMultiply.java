@@ -3,7 +3,6 @@ package org.matrix.seq;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.util.Random;
 import java.util.StringTokenizer;
 
 public class StrassenMultiply {
@@ -12,7 +11,7 @@ public class StrassenMultiply {
 
 	}
 
-	public static String MatrixToString(int[][] matrix){
+	public static String MatrixToString(double[][] matrix){
 		String x = "";
 		for (int i=0; i<matrix[0].length; i++){
 			for (int j=0; j<matrix[i].length; j++){
@@ -23,10 +22,10 @@ public class StrassenMultiply {
 		return x;
 	}
 
-	public static int[][] GenerateQuadrant(int[][] matrix, int subSize, int quadrant){
+	public static double[][] GenerateQuadrant(double[][] matrix, int subSize, int quadrant){
 		int x;
 		int y;
-		int[][] quad = new int[subSize][subSize];
+		double[][] quad = new double[subSize][subSize];
 		if (quadrant==1){
 			x = 0;
 			y = 0;
@@ -52,8 +51,8 @@ public class StrassenMultiply {
 		return quad;
 	}
 
-	public static int[][] CombineQuadrants(int size, int[][] quad1, int[][] quad2, int[][] quad3, int[][] quad4){
-		int[][] combinedMatrix = new int[size][size];
+	public static double[][] CombineQuadrants(int size, double[][] quad1, double[][] quad2, double[][] quad3, double[][] quad4){
+		double[][] combinedMatrix = new double[size][size];
 		for (int i=0; i<size/2; i++){
 			for (int j=0; j<size/2; j++){
 				combinedMatrix[i][j] = quad1[i][j];
@@ -77,26 +76,24 @@ public class StrassenMultiply {
 		return combinedMatrix;
 	}
 
-	public static int[][] MatrixMult(int[][] matrixA, int[][] matrixB){
+	public static double[][] MatrixMult(double[][] matrixA, double[][] matrixB){
 		int rowA = matrixA[0].length;
 		int colA = matrixA.length;
-		int rowB = matrixB[0].length;
 		int colB = matrixB.length;
-		int[][] matrixC = new int[matrixA[0].length][matrixA[0].length];
+		double[][] matrixC = new double[matrixA[0].length][matrixA[0].length];
 
 		for (int rA=0; rA<rowA; rA++){
     		for (int cA=0; cA<colA; cA++){
       			for (int cB=0; cB<colB; cB++){
         			matrixC[rA][cA] = matrixC[rA][cA] + matrixA[cB][cA] * matrixB[rA][cB];
-        			int q = matrixC[rA][cA];
       			}
     		}
   		}
   		return matrixC;
 	}
 
-	public static int[][] MatrixAdd(int[][] matrixA, int[][] matrixB){
-		int[][] matrixC = new int[matrixA.length][matrixA[0].length];
+	public static double[][] MatrixAdd(double[][] matrixA, double[][] matrixB){
+		double[][] matrixC = new double[matrixA.length][matrixA[0].length];
 		for (int i=0; i<matrixA.length; i++){
 			for (int j=0; j<matrixA[0].length; j++){
 				matrixC[i][j] = matrixA[i][j] + matrixB[i][j];
@@ -105,8 +102,8 @@ public class StrassenMultiply {
 		return matrixC;
 	}
 
-	public static int[][] MatrixSubtract(int[][] matrixA, int[][] matrixB){
-		int[][] matrixC = new int[matrixA.length][matrixA[0].length];
+	public static double[][] MatrixSubtract(double[][] matrixA, double[][] matrixB){
+		double[][] matrixC = new double[matrixA.length][matrixA[0].length];
 		for (int i=0; i<matrixA.length; i++){
 			for (int j=0; j<matrixA[0].length; j++){
 				matrixC[i][j] = matrixA[i][j] - matrixB[i][j];
@@ -115,24 +112,24 @@ public class StrassenMultiply {
 		return matrixC;
 	}
 
-	public static int[][] Multiply(int[][] initA, int[][] initB){
-		int[][] prod;
+	public static double[][] Multiply(double[][] initA, double[][] initB){
+		double[][] prod;
 		int size = initA.length;
 
 		int subSize = size/2;
-		int[][] quad1 = new int[subSize][subSize];
-		int[][] quad2 = new int[subSize][subSize];
-		int[][] quad3 = new int[subSize][subSize];
-		int[][] quad4 = new int[subSize][subSize];
+		double[][] quad1 = new double[subSize][subSize];
+		double[][] quad2 = new double[subSize][subSize];
+		double[][] quad3 = new double[subSize][subSize];
+		double[][] quad4 = new double[subSize][subSize];
 
-		int[][] a = new int[subSize][subSize];
-		int[][] b = new int[subSize][subSize];
-		int[][] c = new int[subSize][subSize];
-		int[][] d = new int[subSize][subSize];
-		int[][] e = new int[subSize][subSize];
-		int[][] f = new int[subSize][subSize];
-		int[][] g = new int[subSize][subSize];
-		int[][] h = new int[subSize][subSize];
+		double[][] a = new double[subSize][subSize];
+		double[][] b = new double[subSize][subSize];
+		double[][] c = new double[subSize][subSize];
+		double[][] d = new double[subSize][subSize];
+		double[][] e = new double[subSize][subSize];
+		double[][] f = new double[subSize][subSize];
+		double[][] g = new double[subSize][subSize];
+		double[][] h = new double[subSize][subSize];
 
 		a = GenerateQuadrant(initA,subSize,1);
 		b = GenerateQuadrant(initA,subSize,2);
@@ -143,13 +140,13 @@ public class StrassenMultiply {
 		g = GenerateQuadrant(initB,subSize,3);
 		h = GenerateQuadrant(initB,subSize,4);
 
-		int[][] p1 = MatrixMult(a,MatrixSubtract(f,h));
-		int[][] p2 = MatrixMult(MatrixAdd(a,b),h);
-		int[][] p3 = MatrixMult(MatrixAdd(c,d),e);
-		int[][] p4 = MatrixMult(d,MatrixSubtract(g,e));
-		int[][] p5 = MatrixMult(MatrixAdd(a,d),MatrixAdd(e,h));
-		int[][] p6 = MatrixMult(MatrixSubtract(b,d),MatrixAdd(g,h));
-		int[][] p7 = MatrixMult(MatrixSubtract(a,c),MatrixAdd(e,f));
+		double[][] p1 = MatrixMult(a,MatrixSubtract(f,h));
+		double[][] p2 = MatrixMult(MatrixAdd(a,b),h);
+		double[][] p3 = MatrixMult(MatrixAdd(c,d),e);
+		double[][] p4 = MatrixMult(d,MatrixSubtract(g,e));
+		double[][] p5 = MatrixMult(MatrixAdd(a,d),MatrixAdd(e,h));
+		double[][] p6 = MatrixMult(MatrixSubtract(b,d),MatrixAdd(g,h));
+		double[][] p7 = MatrixMult(MatrixSubtract(a,c),MatrixAdd(e,f));
 
 		quad1 = MatrixAdd(MatrixSubtract(MatrixAdd(p5,p4),p2),p6);
 		quad2 = MatrixAdd(p1,p2);
@@ -160,8 +157,8 @@ public class StrassenMultiply {
 		return prod;
 	}
 
-	public static int[][] readStrassenMatrixFromFile(String filename) {
-		int[][] thisMatrix = null;
+	public static double[][] readStrassenMatrixFromFile(String filename) {
+		double[][] thisMatrix = null;
 		try (BufferedReader br = new BufferedReader(new FileReader(new File(filename)))) {
 		    String line=null;
 		    int rows=0;
@@ -173,7 +170,7 @@ public class StrassenMultiply {
 			    	rows = Integer.parseInt(st.nextToken());
 			    	columns = Integer.parseInt(st.nextToken());
 			    }
-				thisMatrix = new int[rows][columns];
+				thisMatrix = new double[rows][columns];
 			    int i=0;
 			    while((line = br.readLine()) != null) {
 			    	st = new StringTokenizer(line, " ");
@@ -196,21 +193,12 @@ public class StrassenMultiply {
 	}
 	
 	public static void main(String[] args){
-		long executeTimeMS = 0;
-		Random rand = new Random();
-		int[][] initA = new int[32][32];
-		int[][] initB = new int[32][32];
-		for (int i=0; i<initA.length; i++){
-			for (int j=0; j<initA.length; j++){
-				initA[i][j] = rand.nextInt(10);
-				initB[i][j] = rand.nextInt(10);
-			}
-		}
-		long startTime = System.currentTimeMillis();
-		Multiply(initA,initB);
-		long endTime = System.currentTimeMillis();
-        executeTimeMS = endTime - startTime;
-        System.out.println(executeTimeMS);
+		
+		double[][] initA;
+		double[][] initB;
+		long startTime;
+		long endTime;
+		long executeTimeMS;
         
         initA = readStrassenMatrixFromFile(".\\src\\test\\resources\\8_8_A");
         initB = readStrassenMatrixFromFile(".\\src\\test\\resources\\8_8_A");

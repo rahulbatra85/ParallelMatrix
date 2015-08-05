@@ -3,7 +3,6 @@ package org.matrix.parallel;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.concurrent.*;
 import java.util.*;
@@ -14,7 +13,7 @@ public class StrassenParallel {
 
 	}
 
-	public static String MatrixToString(int[][] matrix){
+	public static String MatrixToString(double[][] matrix){
 		String x = "";
 		for (int i=0; i<matrix[0].length; i++){
 			for (int j=0; j<matrix[i].length; j++){
@@ -25,22 +24,22 @@ public class StrassenParallel {
 		return x;
 	}
 
-	public static class GenerateQuadrant implements Callable<int[][]>{
+	public static class GenerateQuadrant implements Callable<double[][]>{
 
-		int[][] matrix;
+		double[][] matrix;
 		int subSize;
 		int quadrant;
 
-		public GenerateQuadrant(int[][] matrix, int subSize, int quadrant){
+		public GenerateQuadrant(double[][] matrix, int subSize, int quadrant){
 			this.matrix = matrix;
 			this.subSize = subSize;
 			this.quadrant = quadrant;
 		}
 
-		public int[][] call(){
+		public double[][] call(){
 			int x;
 			int y;
-			int[][] quad = new int[subSize][subSize];
+			double[][] quad = new double[subSize][subSize];
 			if (quadrant==1){
 				x = 0;
 				y = 0;
@@ -67,8 +66,8 @@ public class StrassenParallel {
 		}
 	}
 
-	public static int[][] CombineQuadrants(int size, int[][] quad1, int[][] quad2, int[][] quad3, int[][] quad4){
-		int[][] combinedMatrix = new int[size][size];
+	public static double[][] CombineQuadrants(int size, double[][] quad1, double[][] quad2, double[][] quad3, double[][] quad4){
+		double[][] combinedMatrix = new double[size][size];
 		for (int i=0; i<size/2; i++){
 			for (int j=0; j<size/2; j++){
 				combinedMatrix[i][j] = quad1[i][j];
@@ -92,33 +91,32 @@ public class StrassenParallel {
 		return combinedMatrix;
 	}
 
-	public static class MatrixMult implements Callable<int[][]>{
+	public static class MatrixMult implements Callable<double[][]>{
 
 		int rowA;
 		int colA;
 		int rowB;
 		int colB;
-		int[][] matrixA;
-		int[][] matrixB;
-		int[][] matrixC;
+		double[][] matrixA;
+		double[][] matrixB;
+		double[][] matrixC;
 
-		public MatrixMult(int[][] matrixA, int[][] matrixB){
+		public MatrixMult(double[][] matrixA, double[][] matrixB){
 			this.rowA = matrixA[0].length;
 			this.colA = matrixA.length;
 			this.rowB = matrixB[0].length;
 			this.colB = matrixB.length;
 			this.matrixA = matrixA;
 			this.matrixB = matrixB;
-			this.matrixC = new int[matrixA[0].length][matrixA[0].length];
+			this.matrixC = new double[matrixA[0].length][matrixA[0].length];
 		}
 
-		public int[][] call(){
+		public double[][] call(){
 
 			for (int rA=0; rA<rowA; rA++){
     			for (int cA=0; cA<colA; cA++){
       				for (int cB=0; cB<colB; cB++){
         				matrixC[rA][cA] = matrixC[rA][cA] + matrixA[cB][cA] * matrixB[rA][cB];
-        				int q = matrixC[rA][cA];
       				}
     			}
   			}
@@ -126,8 +124,8 @@ public class StrassenParallel {
 		}
 	}
 
-	public static int[][] MatrixAdd(int[][] matrixA, int[][] matrixB){
-		int[][] matrixC = new int[matrixA.length][matrixA[0].length];
+	public static double[][] MatrixAdd(double[][] matrixA, double[][] matrixB){
+		double[][] matrixC = new double[matrixA.length][matrixA[0].length];
 		for (int i=0; i<matrixA.length; i++){
 			for (int j=0; j<matrixA[0].length; j++){
 				matrixC[i][j] = matrixA[i][j] + matrixB[i][j];
@@ -136,8 +134,8 @@ public class StrassenParallel {
 		return matrixC;
 	}
 
-	public static int[][] MatrixSubtract(int[][] matrixA, int[][] matrixB){
-		int[][] matrixC = new int[matrixA.length][matrixA[0].length];
+	public static double[][] MatrixSubtract(double[][] matrixA, double[][] matrixB){
+		double[][] matrixC = new double[matrixA.length][matrixA[0].length];
 		for (int i=0; i<matrixA.length; i++){
 			for (int j=0; j<matrixA[0].length; j++){
 				matrixC[i][j] = matrixA[i][j] - matrixB[i][j];
@@ -146,41 +144,41 @@ public class StrassenParallel {
 		return matrixC;
 	}
 
-	public static int[][] Multiply(int[][] initA, int[][] initB){
+	public static double[][] Multiply(double[][] initA, double[][] initB){
 		ExecutorService service = Executors.newCachedThreadPool();
-		int[][] prod;
+		double[][] prod;
 		int size = initA.length;
 		
 		int subSize = size/2;
-		int[][] quad1 = new int[subSize][subSize];
-		int[][] quad2 = new int[subSize][subSize];
-		int[][] quad3 = new int[subSize][subSize];
-		int[][] quad4 = new int[subSize][subSize];
+		double[][] quad1 = new double[subSize][subSize];
+		double[][] quad2 = new double[subSize][subSize];
+		double[][] quad3 = new double[subSize][subSize];
+		double[][] quad4 = new double[subSize][subSize];
 
-		int[][] a = new int[subSize][subSize];
-		int[][] b = new int[subSize][subSize];
-		int[][] c = new int[subSize][subSize];
-		int[][] d = new int[subSize][subSize];
-		int[][] e = new int[subSize][subSize];
-		int[][] f = new int[subSize][subSize];
-		int[][] g = new int[subSize][subSize];
-		int[][] h = new int[subSize][subSize];
+		double[][] a = new double[subSize][subSize];
+		double[][] b = new double[subSize][subSize];
+		double[][] c = new double[subSize][subSize];
+		double[][] d = new double[subSize][subSize];
+		double[][] e = new double[subSize][subSize];
+		double[][] f = new double[subSize][subSize];
+		double[][] g = new double[subSize][subSize];
+		double[][] h = new double[subSize][subSize];
 
-		int[][] p1 = new int[subSize][subSize];
-		int[][] p2 = new int[subSize][subSize];
-		int[][] p3 = new int[subSize][subSize];
-		int[][] p4 = new int[subSize][subSize];
-		int[][] p5 = new int[subSize][subSize];
-		int[][] p6 = new int[subSize][subSize];
-		int[][] p7 = new int[subSize][subSize];
+		double[][] p1 = new double[subSize][subSize];
+		double[][] p2 = new double[subSize][subSize];
+		double[][] p3 = new double[subSize][subSize];
+		double[][] p4 = new double[subSize][subSize];
+		double[][] p5 = new double[subSize][subSize];
+		double[][] p6 = new double[subSize][subSize];
+		double[][] p7 = new double[subSize][subSize];
 
-		List<Future<int[][]>> quadListA = new ArrayList<Future<int[][]>>();
-		List<Future<int[][]>> quadListB = new ArrayList<Future<int[][]>>();
-		List<Future<int[][]>> quadListC = new ArrayList<Future<int[][]>>();
+		List<Future<double[][]>> quadListA = new ArrayList<Future<double[][]>>();
+		List<Future<double[][]>> quadListB = new ArrayList<Future<double[][]>>();
+		List<Future<double[][]>> quadListC = new ArrayList<Future<double[][]>>();
 		for (int i=1; i<5; i++){
-			Future<int[][]> q1 = service.submit(new GenerateQuadrant(initA,subSize,i));
+			Future<double[][]> q1 = service.submit(new GenerateQuadrant(initA,subSize,i));
 			quadListA.add(q1);
-			Future<int[][]> q2 = service.submit(new GenerateQuadrant(initB,subSize,i));
+			Future<double[][]> q2 = service.submit(new GenerateQuadrant(initB,subSize,i));
 			quadListB.add(q2);
 		}
 		try{
@@ -196,7 +194,7 @@ public class StrassenParallel {
 			exc.printStackTrace();
 		}
 
-		Future<int[][]> q3;
+		Future<double[][]> q3;
 		q3 = service.submit(new MatrixMult(a,MatrixSubtract(f,h)));
 		quadListC.add(q3);
 		q3 = service.submit(new MatrixMult(MatrixAdd(a,b),h));
@@ -234,8 +232,8 @@ public class StrassenParallel {
 		return prod;
 	}
 	
-	public static int[][] readStrassenMatrixFromFile(String filename) {
-		int[][] thisMatrix = null;
+	public static double[][] readStrassenMatrixFromFile(String filename) {
+		double[][] thisMatrix = null;
 		try (BufferedReader br = new BufferedReader(new FileReader(new File(filename)))) {
 		    String line=null;
 		    int rows=0;
@@ -247,7 +245,7 @@ public class StrassenParallel {
 			    	rows = Integer.parseInt(st.nextToken());
 			    	columns = Integer.parseInt(st.nextToken());
 			    }
-				thisMatrix = new int[rows][columns];
+				thisMatrix = new double[rows][columns];
 			    int i=0;
 			    while((line = br.readLine()) != null) {
 			    	st = new StringTokenizer(line, " ");
@@ -271,22 +269,13 @@ public class StrassenParallel {
 	
 
 	public static void main(String[] args){
-		long executeTimeMS = 0;
-		Random rand = new Random();
-		int[][] initA = new int[8][8];
-		int[][] initB = new int[8][8];
-		for (int i=0; i<initA.length; i++){
-			for (int j=0; j<initA.length; j++){
-				initA[i][j] = rand.nextInt(5);
-				initB[i][j] = rand.nextInt(5);
-			}
-		}
-		long startTime = System.currentTimeMillis();
-		Multiply(initA,initB);
-		long endTime = System.currentTimeMillis();
-        executeTimeMS = endTime - startTime;
-        System.out.println(executeTimeMS);
-        
+
+		double[][] initA;
+		double[][] initB;
+		long startTime;
+		long endTime;
+		long executeTimeMS;
+		
         initA = readStrassenMatrixFromFile(".\\src\\test\\resources\\8_8_A");
         initB = readStrassenMatrixFromFile(".\\src\\test\\resources\\8_8_A");
 		startTime = System.currentTimeMillis();
