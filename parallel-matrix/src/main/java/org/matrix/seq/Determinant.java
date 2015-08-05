@@ -1,22 +1,12 @@
-import java.util.concurrent.Callable;
-import java.util.concurrent.*;
-import java.util.*;
 import java.util.Random;
 
-public class DeterminantParallel implements Callable<Integer>{
-
+public class Determinant{
+//Method for calculating the determinant of a square matrix
 	int[][] matrix;
-	int column;
-	public static ExecutorService threadPool = Executors.newCachedThreadPool();
-	
-	public DeterminantParallel(int[][] matrix, int column){
-		this.matrix = matrix;
-		this.column = column;
-	}
 
-	public Integer call() throws Exception {
-		int detVal = BeginDet(matrix, column);
-		return detVal;
+	public Determinant(int[][] matrix){
+		//Constructor
+		this.matrix = matrix;
 	}
 
 	public static String MatrixToString(int[][] matrix){
@@ -73,13 +63,6 @@ public class DeterminantParallel implements Callable<Integer>{
 		return det;
 	}
 
-	public static int BeginDet(int[][] matrix, int column){
-		//Initializes the matrix we want to recurse through for a given thread
-		int[][] newMatrix = SubMatrix(column, matrix);
-		int retVal = matrix[column][0] * DetNxN(newMatrix);
-		return retVal;
-	}
-
 	public static int[][] SubMatrix(int column, int[][] matrix){
 		int row = 0;
 		int col = 0;
@@ -100,32 +83,14 @@ public class DeterminantParallel implements Callable<Integer>{
 
 	public static void main(String[] args){
 
-		int[][] x = {{2,3,4,8,9},
-					 {0,6,1,9,3},
-					 {4,7,2,1,9},
-					 {4,7,1,2,3},
-					 {0,5,6,1,8}};
-
-		/***int[][] x = {{2, 5, 8, 6, 1, 2, 3, 4, 9},
-					 {5, 3, 8, 4, 6, 9, 7, 2, 5},
-					 {1, 2, 3, 0, 2, 5, 9, 4, 3},
-					 {3, 5, 2, 6, 8, 4, 9, 6, 9},
-					 {7, 1, 2, 5, 4, 5, 8, 3, 0},
-					 {3, 6, 2, 5, 7, 8, 9, 6, 1},
-					 {1, 2, 2, 3, 5, 8, 7, 9, 4},
-					 {3, 2, 5, 2, 4, 5, 7, 9, 0},
-					 {9, 4, 6, 2, 1, 9, 7, 3, 6}
-					};***/
-
-		/***int[][] x = new int[14][14];
+		int[][] x = new int[14][14];
 		Random rando = new Random();
 		for (int i=0; i<x[0].length; i++){
 			for (int j=0; j<x[0].length; j++){
 				x[i][j] = rando.nextInt(10);
 			}
-		}***/
+		}
 
-		int numThreads = 4;
 		System.out.println(MatrixToString(x));
 		int size = x[0].length;
 		long startTime = System.currentTimeMillis();
@@ -137,26 +102,7 @@ public class DeterminantParallel implements Callable<Integer>{
 			System.out.println(Det2x2(x));
 			System.exit(0);
 		}
-		ArrayList<Future<Integer>> vals = new ArrayList<Future<Integer>>();
-		for (int i=0; i<size; i++){
-			DeterminantParallel d = new DeterminantParallel(x, i);
-			Future<Integer> fut = threadPool.submit(d);
-			vals.add(fut);
-		}
-		threadPool.shutdown();
-		int det = 0;
-		for (int j=0; j<vals.size(); j++){
-			try{
-				if (j%2==0){
-					det += vals.get(j).get();
-				}
-				else {
-					det -= vals.get(j).get();
-				}
-			} catch (Exception exc) {
-				System.err.println(exc);
-			}
-		}
+		int det = DetNxN(x);
 		long endTime = System.currentTimeMillis();
 		long executeTimeMS = endTime - startTime;
 		System.out.println(executeTimeMS);
