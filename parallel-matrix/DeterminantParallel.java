@@ -1,7 +1,8 @@
-import java.util.concurrent.Callable;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.concurrent.*;
 import java.util.*;
-import java.util.Random;
 
 public class DeterminantParallel implements Callable<Integer>{
 
@@ -98,6 +99,41 @@ public class DeterminantParallel implements Callable<Integer>{
 		return sub;
 	}
 
+	public static int[][] readStrassenMatrixFromFile(String filename) {
+		int[][] thisMatrix = null;
+		try (BufferedReader br = new BufferedReader(new FileReader(new File(filename)))) {
+		    String line=null;
+		    int rows=0;
+		    int columns=0;
+		    StringTokenizer st = null;
+    		try {
+			    if((line = br.readLine()) != null) {
+			    	st = new StringTokenizer(line, " ");	
+			    	rows = Integer.parseInt(st.nextToken());
+			    	columns = Integer.parseInt(st.nextToken());
+			    }
+				thisMatrix = new int[rows][columns];
+			    int i=0;
+			    while((line = br.readLine()) != null) {
+			    	st = new StringTokenizer(line, " ");
+			    	int j=0;
+			    	while(st.hasMoreTokens() && j < columns) {
+			    			thisMatrix[i][j] = Integer.parseInt(st.nextToken().trim());
+			    			j++;
+			    	}
+			    	i++;
+			    }
+			    br.close();
+	    	} catch ( Exception e) {
+	    			e.printStackTrace();
+	    			br.close();
+	    	}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
+		return thisMatrix;
+	}
+	
 	public static void main(String[] args){
 
 		int[][] x = {{2,3,4,8,9},
@@ -143,7 +179,7 @@ public class DeterminantParallel implements Callable<Integer>{
 			Future<Integer> fut = threadPool.submit(d);
 			vals.add(fut);
 		}
-		threadPool.shutdown();
+//		threadPool.shutdown();
 		int det = 0;
 		for (int j=0; j<vals.size(); j++){
 			try{
@@ -161,5 +197,171 @@ public class DeterminantParallel implements Callable<Integer>{
 		long executeTimeMS = endTime - startTime;
 		System.out.println(executeTimeMS);
 		System.out.println(det);
+		
+//benchmarks
+        x = readStrassenMatrixFromFile(".\\src\\test\\resources\\2_2_A");
+		startTime = System.currentTimeMillis();
+		if (size == 1){
+			System.out.println(x[0][0]);
+			System.exit(0);
+		}
+		if (size == 2){
+			System.out.println(Det2x2(x));
+			System.exit(0);
+		}
+		vals = new ArrayList<Future<Integer>>();
+		for (int i=0; i<size; i++){
+			DeterminantParallel d = new DeterminantParallel(x, i);
+			Future<Integer> fut = threadPool.submit(d);
+			vals.add(fut);
+		}
+		det = 0;
+		for (int j=0; j<vals.size(); j++){
+			try{
+				if (j%2==0){
+					det += vals.get(j).get();
+				}
+				else {
+					det -= vals.get(j).get();
+				}
+			} catch (Exception exc) {
+				System.err.println(exc);
+			}
+		}
+		endTime = System.currentTimeMillis();
+        executeTimeMS = endTime - startTime;
+        System.out.println("Time for determinant seq 2x2: " + executeTimeMS);
+        
+        x = readStrassenMatrixFromFile(".\\src\\test\\resources\\2_2_A");
+		startTime = System.currentTimeMillis();
+		if (size == 1){
+			System.out.println(x[0][0]);
+			System.exit(0);
+		}
+		if (size == 2){
+			System.out.println(Det2x2(x));
+			System.exit(0);
+		}
+		vals = new ArrayList<Future<Integer>>();
+		for (int i=0; i<size; i++){
+			DeterminantParallel d = new DeterminantParallel(x, i);
+			Future<Integer> fut = threadPool.submit(d);
+			vals.add(fut);
+		}
+		det = 0;
+		for (int j=0; j<vals.size(); j++){
+			try{
+				if (j%2==0){
+					det += vals.get(j).get();
+				}
+				else {
+					det -= vals.get(j).get();
+				}
+			} catch (Exception exc) {
+				System.err.println(exc);
+			}
+		}
+		endTime = System.currentTimeMillis();
+        executeTimeMS = endTime - startTime;
+        System.out.println("Time for determinant seq 4x4: " + executeTimeMS);
+		
+		x = readStrassenMatrixFromFile(".\\src\\test\\resources\\8_8_A");
+		startTime = System.currentTimeMillis();
+		if (size == 1){
+			System.out.println(x[0][0]);
+			System.exit(0);
+		}
+		if (size == 2){
+			System.out.println(Det2x2(x));
+			System.exit(0);
+		}
+		vals = new ArrayList<Future<Integer>>();
+		for (int i=0; i<size; i++){
+			DeterminantParallel d = new DeterminantParallel(x, i);
+			Future<Integer> fut = threadPool.submit(d);
+			vals.add(fut);
+		}
+		det = 0;
+		for (int j=0; j<vals.size(); j++){
+			try{
+				if (j%2==0){
+					det += vals.get(j).get();
+				}
+				else {
+					det -= vals.get(j).get();
+				}
+			} catch (Exception exc) {
+				System.err.println(exc);
+			}
+		}
+		endTime = System.currentTimeMillis();
+        executeTimeMS = endTime - startTime;
+        System.out.println("Time for determinant seq 8x8: " + executeTimeMS);
+        
+        x = readStrassenMatrixFromFile(".\\src\\test\\resources\\16_16_A");
+		startTime = System.currentTimeMillis();
+		if (size == 1){
+			System.out.println(x[0][0]);
+			System.exit(0);
+		}
+		if (size == 2){
+			System.out.println(Det2x2(x));
+			System.exit(0);
+		}
+		vals = new ArrayList<Future<Integer>>();
+		for (int i=0; i<size; i++){
+			DeterminantParallel d = new DeterminantParallel(x, i);
+			Future<Integer> fut = threadPool.submit(d);
+			vals.add(fut);
+		}
+		det = 0;
+		for (int j=0; j<vals.size(); j++){
+			try{
+				if (j%2==0){
+					det += vals.get(j).get();
+				}
+				else {
+					det -= vals.get(j).get();
+				}
+			} catch (Exception exc) {
+				System.err.println(exc);
+			}
+		}
+		endTime = System.currentTimeMillis();
+        executeTimeMS = endTime - startTime;
+        System.out.println("Time for determinant seq 16x16: " + executeTimeMS);
+        
+        x = readStrassenMatrixFromFile(".\\src\\test\\resources\\32_32_A");
+		startTime = System.currentTimeMillis();
+		if (size == 1){
+			System.out.println(x[0][0]);
+			System.exit(0);
+		}
+		if (size == 2){
+			System.out.println(Det2x2(x));
+			System.exit(0);
+		}
+		vals = new ArrayList<Future<Integer>>();
+		for (int i=0; i<size; i++){
+			DeterminantParallel d = new DeterminantParallel(x, i);
+			Future<Integer> fut = threadPool.submit(d);
+			vals.add(fut);
+		}
+		det = 0;
+		for (int j=0; j<vals.size(); j++){
+			try{
+				if (j%2==0){
+					det += vals.get(j).get();
+				}
+				else {
+					det -= vals.get(j).get();
+				}
+			} catch (Exception exc) {
+				System.err.println(exc);
+			}
+		}
+		endTime = System.currentTimeMillis();
+        executeTimeMS = endTime - startTime;
+        System.out.println("Time for determinant seq 32x32: " + executeTimeMS);
 	}
 }

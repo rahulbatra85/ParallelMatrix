@@ -1,4 +1,8 @@
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.Random;
+import java.util.StringTokenizer;
 
 public class StrassenMultiply {
 	
@@ -177,11 +181,46 @@ public class StrassenMultiply {
 		return prod;
 	}
 
+	public static int[][] readStrassenMatrixFromFile(String filename) {
+		int[][] thisMatrix = null;
+		try (BufferedReader br = new BufferedReader(new FileReader(new File(filename)))) {
+		    String line=null;
+		    int rows=0;
+		    int columns=0;
+		    StringTokenizer st = null;
+    		try {
+			    if((line = br.readLine()) != null) {
+			    	st = new StringTokenizer(line, " ");	
+			    	rows = Integer.parseInt(st.nextToken());
+			    	columns = Integer.parseInt(st.nextToken());
+			    }
+				thisMatrix = new int[rows][columns];
+			    int i=0;
+			    while((line = br.readLine()) != null) {
+			    	st = new StringTokenizer(line, " ");
+			    	int j=0;
+			    	while(st.hasMoreTokens() && j < columns) {
+			    			thisMatrix[i][j] = Integer.parseInt(st.nextToken().trim());
+			    			j++;
+			    	}
+			    	i++;
+			    }
+			    br.close();
+	    	} catch ( Exception e) {
+	    			e.printStackTrace();
+	    			br.close();
+	    	}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
+		return thisMatrix;
+	}
+	
 	public static void main(String[] args){
 		long executeTimeMS = 0;
 		Random rand = new Random();
-		int[][] initA = new int[300][300];
-		int[][] initB = new int[300][300];
+		int[][] initA = new int[32][32];
+		int[][] initB = new int[32][32];
 		for (int i=0; i<initA.length; i++){
 			for (int j=0; j<initA.length; j++){
 				initA[i][j] = rand.nextInt(10);
@@ -193,5 +232,85 @@ public class StrassenMultiply {
 		long endTime = System.currentTimeMillis();
         executeTimeMS = endTime - startTime;
         System.out.println(executeTimeMS);
+        
+        initA = readStrassenMatrixFromFile(".\\src\\test\\resources\\8_8_A");
+        initB = readStrassenMatrixFromFile(".\\src\\test\\resources\\8_8_A");
+		startTime = System.currentTimeMillis();
+		Multiply(initA,initB);
+		endTime = System.currentTimeMillis();
+        executeTimeMS = endTime - startTime;
+        System.out.println("Time for strassens 8x8: " + executeTimeMS);
+        
+        initA = readStrassenMatrixFromFile(".\\src\\test\\resources\\16_16_A");
+        initB = readStrassenMatrixFromFile(".\\src\\test\\resources\\16_16_A");
+		startTime = System.currentTimeMillis();
+		Multiply(initA,initB);
+		endTime = System.currentTimeMillis();
+        executeTimeMS = endTime - startTime;
+        System.out.println("Time for strassens 16x16: " + executeTimeMS);
+        
+        initA = readStrassenMatrixFromFile(".\\src\\test\\resources\\32_32_A");
+        initB = readStrassenMatrixFromFile(".\\src\\test\\resources\\32_32_A");
+		startTime = System.currentTimeMillis();
+		Multiply(initA,initB);
+		endTime = System.currentTimeMillis();
+        executeTimeMS = endTime - startTime;
+        System.out.println("Time for strassens 32x32: " + executeTimeMS);
+        
+        initA = readStrassenMatrixFromFile(".\\src\\test\\resources\\64_64_A");
+        initB = readStrassenMatrixFromFile(".\\src\\test\\resources\\64_64_A");
+		startTime = System.currentTimeMillis();
+		Multiply(initA,initB);
+		endTime = System.currentTimeMillis();
+        executeTimeMS = endTime - startTime;
+        System.out.println("Time for strassens 64x64: " + executeTimeMS);
+        
+        initA = readStrassenMatrixFromFile(".\\src\\test\\resources\\128_128_A");
+        initB = readStrassenMatrixFromFile(".\\src\\test\\resources\\128_128_A");
+		startTime = System.currentTimeMillis();
+		Multiply(initA,initB);
+		endTime = System.currentTimeMillis();
+        executeTimeMS = endTime - startTime;
+        System.out.println("Time for strassens 128x128: " + executeTimeMS);
+        
+        initA = readStrassenMatrixFromFile(".\\src\\test\\resources\\256_256_A");
+        initB = readStrassenMatrixFromFile(".\\src\\test\\resources\\256_256_A");
+		startTime = System.currentTimeMillis();
+		Multiply(initA,initB);
+		endTime = System.currentTimeMillis();
+        executeTimeMS = endTime - startTime;
+        System.out.println("Time for strassens 256x256: " + executeTimeMS);
+        
+        initA = readStrassenMatrixFromFile(".\\src\\test\\resources\\512_512_A");
+        initB = readStrassenMatrixFromFile(".\\src\\test\\resources\\512_512_A");
+		startTime = System.currentTimeMillis();
+		Multiply(initA,initB);
+		endTime = System.currentTimeMillis();
+        executeTimeMS = endTime - startTime;
+        System.out.println("Time for strassens 512x512: " + executeTimeMS);
+        
+        initA = readStrassenMatrixFromFile(".\\src\\test\\resources\\1024_1024_A");
+        initB = readStrassenMatrixFromFile(".\\src\\test\\resources\\1024_1024_A");
+		startTime = System.currentTimeMillis();
+		Multiply(initA,initB);
+		endTime = System.currentTimeMillis();
+        executeTimeMS = endTime - startTime;
+        System.out.println("Time for strassens 1024x1024: " + executeTimeMS);
+        
+        initA = readStrassenMatrixFromFile(".\\src\\test\\resources\\2048_2048_A");
+        initB = readStrassenMatrixFromFile(".\\src\\test\\resources\\2048_2048_A");
+		startTime = System.currentTimeMillis();
+		Multiply(initA,initB);
+		endTime = System.currentTimeMillis();
+        executeTimeMS = endTime - startTime;
+        System.out.println("Time for strassens 2048x2048: " + executeTimeMS);
+        
+        initA = readStrassenMatrixFromFile(".\\src\\test\\resources\\4096_4096_A");
+        initB = readStrassenMatrixFromFile(".\\src\\test\\resources\\4096_4096_A");
+		startTime = System.currentTimeMillis();
+		Multiply(initA,initB);
+		endTime = System.currentTimeMillis();
+        executeTimeMS = endTime - startTime;
+        System.out.println("Time for strassens 4096x4096: " + executeTimeMS);
 	}
 }
