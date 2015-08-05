@@ -21,7 +21,7 @@ public class MatrixSeq extends Matrix {
 	public MatrixSeq(String filename) {
 		super(filename);
 		this.mOpAdd = new AddSeq();
-		this.mOpDeterminant = new DeterminantParallel();
+		this.mOpDeterminant = new DeterminantSeq();
 		this.mOpInverse = new InverseSeq();
 		this.mOpLinearSolver = new LinearSolverSeq();
 		this.mOpLUDecompose = new LUDecomposeSeq();
