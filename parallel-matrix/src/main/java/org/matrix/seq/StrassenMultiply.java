@@ -112,49 +112,45 @@ public class StrassenMultiply {
 	public static int[][] Multiply(int[][] initA, int[][] initB){
 		int[][] prod;
 		int size = initA.length;
-		if (size<4){
-			prod = MatrixMult(initA,initB);
-		}
-		else {
-			int subSize = size/2;
-			int[][] quad1 = new int[subSize][subSize];
-			int[][] quad2 = new int[subSize][subSize];
-			int[][] quad3 = new int[subSize][subSize];
-			int[][] quad4 = new int[subSize][subSize];
 
-			int[][] a = new int[subSize][subSize];
-			int[][] b = new int[subSize][subSize];
-			int[][] c = new int[subSize][subSize];
-			int[][] d = new int[subSize][subSize];
-			int[][] e = new int[subSize][subSize];
-			int[][] f = new int[subSize][subSize];
-			int[][] g = new int[subSize][subSize];
-			int[][] h = new int[subSize][subSize];
+		int subSize = size/2;
+		int[][] quad1 = new int[subSize][subSize];
+		int[][] quad2 = new int[subSize][subSize];
+		int[][] quad3 = new int[subSize][subSize];
+		int[][] quad4 = new int[subSize][subSize];
 
-			a = GenerateQuadrant(initA,subSize,1);
-			b = GenerateQuadrant(initA,subSize,2);
-			c = GenerateQuadrant(initA,subSize,3);
-			d = GenerateQuadrant(initA,subSize,4);
-			e = GenerateQuadrant(initB,subSize,1);
-			f = GenerateQuadrant(initB,subSize,2);
-			g = GenerateQuadrant(initB,subSize,3);
-			h = GenerateQuadrant(initB,subSize,4);
+		int[][] a = new int[subSize][subSize];
+		int[][] b = new int[subSize][subSize];
+		int[][] c = new int[subSize][subSize];
+		int[][] d = new int[subSize][subSize];
+		int[][] e = new int[subSize][subSize];
+		int[][] f = new int[subSize][subSize];
+		int[][] g = new int[subSize][subSize];
+		int[][] h = new int[subSize][subSize];
 
-			int[][] p1 = MatrixMult(a,MatrixSubtract(f,h));
-			int[][] p2 = MatrixMult(MatrixAdd(a,b),h);
-			int[][] p3 = MatrixMult(MatrixAdd(c,d),e);
-			int[][] p4 = MatrixMult(d,MatrixSubtract(g,e));
-			int[][] p5 = MatrixMult(MatrixAdd(a,d),MatrixAdd(e,h));
-			int[][] p6 = MatrixMult(MatrixSubtract(b,d),MatrixAdd(g,h));
-			int[][] p7 = MatrixMult(MatrixSubtract(a,c),MatrixAdd(e,f));
+		a = GenerateQuadrant(initA,subSize,1);
+		b = GenerateQuadrant(initA,subSize,2);
+		c = GenerateQuadrant(initA,subSize,3);
+		d = GenerateQuadrant(initA,subSize,4);
+		e = GenerateQuadrant(initB,subSize,1);
+		f = GenerateQuadrant(initB,subSize,2);
+		g = GenerateQuadrant(initB,subSize,3);
+		h = GenerateQuadrant(initB,subSize,4);
 
-			quad1 = MatrixAdd(MatrixSubtract(MatrixAdd(p5,p4),p2),p6);
-			quad2 = MatrixAdd(p1,p2);
-			quad3 = MatrixAdd(p3,p4);
-			quad4 = MatrixSubtract(MatrixSubtract(MatrixAdd(p1,p5),p3),p7);
+		int[][] p1 = MatrixMult(a,MatrixSubtract(f,h));
+		int[][] p2 = MatrixMult(MatrixAdd(a,b),h);
+		int[][] p3 = MatrixMult(MatrixAdd(c,d),e);
+		int[][] p4 = MatrixMult(d,MatrixSubtract(g,e));
+		int[][] p5 = MatrixMult(MatrixAdd(a,d),MatrixAdd(e,h));
+		int[][] p6 = MatrixMult(MatrixSubtract(b,d),MatrixAdd(g,h));
+		int[][] p7 = MatrixMult(MatrixSubtract(a,c),MatrixAdd(e,f));
 
-			prod = CombineQuadrants(size,quad1,quad2,quad3,quad4);
-		}
+		quad1 = MatrixAdd(MatrixSubtract(MatrixAdd(p5,p4),p2),p6);
+		quad2 = MatrixAdd(p1,p2);
+		quad3 = MatrixAdd(p3,p4);
+		quad4 = MatrixSubtract(MatrixSubtract(MatrixAdd(p1,p5),p3),p7);
+
+		prod = CombineQuadrants(size,quad1,quad2,quad3,quad4);
 		return prod;
 	}
 
