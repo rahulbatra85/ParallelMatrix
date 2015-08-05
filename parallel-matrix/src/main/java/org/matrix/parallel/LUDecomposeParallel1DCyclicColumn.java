@@ -10,109 +10,7 @@ import org.matrix.common.Matrix;
 import org.matrix.common.MatrixConfig;
 
 
-class workerThread implements Runnable{
-	Matrix A, p;
-	int tid, numT;
-	CyclicBarrier barrier;
-	boolean singular;
-	
-	workerThread(Matrix A, Matrix p, int tid, int numT, CyclicBarrier b){
-		this.A = A;
-		this.p = p;
-		this.tid = tid;
-		this.numT = numT;
-		this.barrier = b;
-		this.singular = false;
-	}
-	
-	@Override
-	public void run() {	
-		int k = 0;
-		int n = A.getNumRows();
-		
-		while(k<n && !singular){
-			
-			//Do pivot search(only 1 thread)
-			if(tid==1){
-				//Find max pivot
-				int idx=k;
-				double max = 0;
-				for(int i=k; i<n; i++){
-					if(Math.abs(A.getElem(i, k)) > max){
-						idx = i;
-						max = A.getElem(i, k);
-					}
-				}
-				
-				if(max == 0){
-					singular = true;
-				} else{
-				
-					//Exchange rows if max pivot is another row
-					if(idx != k){
-						//Update pivot vector
-						double tmp = p.getElem(k, 0);
-						double tmp1 = p.getElem(idx, 0);
-						p.setElem(k, 0, tmp1);				
-						p.setElem(idx, 0, tmp);
-				
-						//Exchange row
-						for(int i=0; i<n; i++){
-							tmp = A.getElem(k, i);
-							tmp1 = A.getElem(idx, i);
-							A.setElem(k, i, tmp1);
-							A.setElem(idx, i, tmp);
-						}
-					}
-				}
-			}
-		
-			//Barrier			
-			try {								
-				barrier.await();				
-			} catch (InterruptedException | BrokenBarrierException e) {
-				e.printStackTrace();
-			}
-		
-			if(!singular){
-				//Determine your columns
-				int b=0;
-				if(k==0){
-					b = 0;
-				} else{
-					if(k%numT + 1 > tid){
-						b = k/numT + 1;
-					} else{
-						b = k/numT;
-					}
-				}			
-						
-				double div = A.getElem(k, k);
-				for(int c = ((b*numT) + tid);c<n;c+=numT){
-					//Do division
-					A.setElem(k, c, A.getElem(k, c)/div);
-								
-					//Do multiply and subtract
-					for(int r=k+1;r<n;r++){
-						double val = A.getElem(r, c) - A.getElem(r, k)*A.getElem(k, c);
-						A.setElem(r, c, val);
-					}
-					
-				}
-			}
-		
-			//Barrier			
-			try {								
-				barrier.await();				
-			} catch (InterruptedException | BrokenBarrierException e) {
-				e.printStackTrace();
-			}
-			
-			//Next iteration
-			k++;			
-		}
-	}
-}
+
 
 public class LUDecomposeParallel1DCyclicColumn implements IfaceLUDecompose {
 	public static ExecutorService threadPool = Executors.newCachedThreadPool();
@@ -173,6 +71,110 @@ public class LUDecomposeParallel1DCyclicColumn implements IfaceLUDecompose {
 			return null;
 		} else {
 			return ret;
+		}
+	}
+	
+	class workerThread implements Runnable{
+		Matrix A, p;
+		int tid, numT;
+		CyclicBarrier barrier;
+		boolean singular;
+		
+		workerThread(Matrix A, Matrix p, int tid, int numT, CyclicBarrier b){
+			this.A = A;
+			this.p = p;
+			this.tid = tid;
+			this.numT = numT;
+			this.barrier = b;
+			this.singular = false;
+		}
+		
+		@Override
+		public void run() {	
+			int k = 0;
+			int n = A.getNumRows();
+			
+			while(k<n && !singular){
+				
+				//Do pivot search(only 1 thread)
+				if(tid==1){
+					//Find max pivot
+					int idx=k;
+					double max = 0;
+					for(int i=k; i<n; i++){
+						if(Math.abs(A.getElem(i, k)) > max){
+							idx = i;
+							max = A.getElem(i, k);
+						}
+					}
+					
+					if(max == 0){
+						singular = true;
+					} else{
+					
+						//Exchange rows if max pivot is another row
+						if(idx != k){
+							//Update pivot vector
+							double tmp = p.getElem(k, 0);
+							double tmp1 = p.getElem(idx, 0);
+							p.setElem(k, 0, tmp1);				
+							p.setElem(idx, 0, tmp);
+					
+							//Exchange row
+							for(int i=0; i<n; i++){
+								tmp = A.getElem(k, i);
+								tmp1 = A.getElem(idx, i);
+								A.setElem(k, i, tmp1);
+								A.setElem(idx, i, tmp);
+							}
+						}
+					}
+				}
+			
+				//Barrier			
+				try {								
+					barrier.await();				
+				} catch (InterruptedException | BrokenBarrierException e) {
+					e.printStackTrace();
+				}
+			
+				if(!singular){
+					//Determine your columns
+					int b=0;
+					if(k==0){
+						b = 0;
+					} else{
+						if(k%numT + 1 > tid){
+							b = k/numT + 1;
+						} else{
+							b = k/numT;
+						}
+					}			
+							
+					double div = A.getElem(k, k);
+					for(int c = ((b*numT) + tid);c<n;c+=numT){
+						//Do division
+						A.setElem(k, c, A.getElem(k, c)/div);
+									
+						//Do multiply and subtract
+						for(int r=k+1;r<n;r++){
+							double val = A.getElem(r, c) - A.getElem(r, k)*A.getElem(k, c);
+							A.setElem(r, c, val);
+						}
+						
+					}
+				}
+			
+				//Barrier			
+				try {								
+					barrier.await();				
+				} catch (InterruptedException | BrokenBarrierException e) {
+					e.printStackTrace();
+				}
+				
+				//Next iteration
+				k++;			
+			}
 		}
 	}
 
