@@ -175,7 +175,7 @@ public class StrassenParallel {
 		List<Future<int[][]>> quadListA = new ArrayList<Future<int[][]>>();
 		List<Future<int[][]>> quadListB = new ArrayList<Future<int[][]>>();
 		List<Future<int[][]>> quadListC = new ArrayList<Future<int[][]>>();
-		for (int i=0; i<4; i++){
+		for (int i=1; i<5; i++){
 			Future<int[][]> q1 = service.submit(new GenerateQuadrant(initA,subSize,i));
 			quadListA.add(q1);
 			Future<int[][]> q2 = service.submit(new GenerateQuadrant(initB,subSize,i));
@@ -183,21 +183,13 @@ public class StrassenParallel {
 		}
 		try{
 			a = quadListA.get(0).get();
-			//System.out.println("a: " + MatrixToString(a));
 			b = quadListA.get(1).get();
-			//System.out.println("b: " + MatrixToString(b));
 			c = quadListA.get(2).get();
-			//System.out.println("c: " + MatrixToString(c));
 			d = quadListA.get(3).get();
-			//System.out.println("d: " + MatrixToString(d));
 			e = quadListB.get(0).get();
-			//System.out.println("e: " + MatrixToString(e));
 			f = quadListB.get(1).get();
-			//System.out.println("f: " + MatrixToString(f));
 			g = quadListB.get(2).get();
-			//System.out.println("g: " + MatrixToString(g));
 			h = quadListB.get(3).get();
-			//System.out.println("h: " + MatrixToString(h));
 		} catch (Exception exc){
 			exc.printStackTrace();
 		}
@@ -220,31 +212,20 @@ public class StrassenParallel {
 
 		try{
 			p1 = quadListC.get(0).get();
-			//System.out.println(MatrixToString(p1));
 			p2 = quadListC.get(1).get();
-			//System.out.println(MatrixToString(p2));
 			p3 = quadListC.get(2).get();
-			//System.out.println(MatrixToString(p3));
 			p4 = quadListC.get(3).get();
-			//System.out.println(MatrixToString(p4));
 			p5 = quadListC.get(4).get();
-			//System.out.println(MatrixToString(p5));
 			p6 = quadListC.get(5).get();
-			//System.out.println(MatrixToString(p6));
 			p7 = quadListC.get(6).get();
-			//System.out.println(MatrixToString(p7));
 		} catch (Exception exc){
 			exc.printStackTrace();
 		}
 
 		quad1 = MatrixAdd(MatrixSubtract(MatrixAdd(p5,p4),p2),p6);
-		//System.out.println(MatrixToString(quad4));
 		quad2 = MatrixAdd(p1,p2);
-		//System.out.println(MatrixToString(quad2));
 		quad3 = MatrixAdd(p3,p4);
-		//System.out.println(MatrixToString(quad3));
 		quad4 = MatrixSubtract(MatrixSubtract(MatrixAdd(p1,p5),p3),p7);
-		//System.out.println(MatrixToString(quad4));
 
 		service.shutdownNow();
 		prod = CombineQuadrants(size,quad1,quad2,quad3,quad4);
@@ -290,12 +271,12 @@ public class StrassenParallel {
 	public static void main(String[] args){
 		long executeTimeMS = 0;
 		Random rand = new Random();
-		int[][] initA = new int[100][100];
-		int[][] initB = new int[100][100];
+		int[][] initA = new int[8][8];
+		int[][] initB = new int[8][8];
 		for (int i=0; i<initA.length; i++){
 			for (int j=0; j<initA.length; j++){
-				initA[i][j] = rand.nextInt(10);
-				initB[i][j] = rand.nextInt(10);
+				initA[i][j] = rand.nextInt(5);
+				initB[i][j] = rand.nextInt(5);
 			}
 		}
 		long startTime = System.currentTimeMillis();

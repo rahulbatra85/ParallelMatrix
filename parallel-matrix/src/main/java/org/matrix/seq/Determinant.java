@@ -122,24 +122,13 @@ public class Determinant{
 	
 	public static void main(String[] args){
 
-		int[][] x = {{2, 5, 8, 6, 1, 2, 3, 4, 9},
-					 {5, 3, 8, 4, 6, 9, 7, 2, 5},
-					 {1, 2, 3, 0, 2, 5, 9, 4, 3},
-					 {3, 5, 2, 6, 8, 4, 9, 6, 9},
-					 {7, 1, 2, 5, 4, 5, 8, 3, 0},
-					 {3, 6, 2, 5, 7, 8, 9, 6, 1},
-					 {1, 2, 2, 3, 5, 8, 7, 9, 4},
-					 {3, 2, 5, 2, 4, 5, 7, 9, 0},
-					 {9, 4, 6, 2, 1, 9, 7, 3, 6}
-					};
-
-		/***int[][] x = new int[14][14];
+		int[][] x = new int[14][14];
 		Random rando = new Random();
 		for (int i=0; i<x[0].length; i++){
 			for (int j=0; j<x[0].length; j++){
 				x[i][j] = rando.nextInt(10);
 			}
-		}***/
+		}
 
 		System.out.println(MatrixToString(x));
 		int size = x[0].length;

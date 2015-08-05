@@ -22,7 +22,7 @@ public class MatrixParallel extends Matrix {
 	public MatrixParallel(String filename) {
 		super(filename);
 		//this.mOpAdd = new AddSeq();
-		this.mOpDeterminant = new DeterminantParallel();
+//		this.mOpDeterminant = new DeterminantParallel();
 		//this.mOpInverse = new InverseSeq();
 		//this.mOpLinearSolver = new LinearSolverSeq();
 		//this.mOpLUDecompose = new LUDecomposeSeq();
@@ -32,7 +32,7 @@ public class MatrixParallel extends Matrix {
 	public MatrixParallel(int rows, int columns) {
 		super(rows, columns);
 		//this.mOpAdd = new AddSeq();
-		this.mOpDeterminant = new DeterminantParallel();
+//		this.mOpDeterminant = new DeterminantParallel();
 		//this.mOpInverse = new InverseSeq();
 		//this.mOpLinearSolver = new LinearSolverSeq();
 		//this.mOpLUDecompose = new LUDecomposeSeq();
@@ -42,7 +42,7 @@ public class MatrixParallel extends Matrix {
 	public MatrixParallel(int rows, int columns, boolean zerod, int max){
 		super(rows,columns,zerod,max);
 		//this.mOpAdd = new AddSeq();
-		this.mOpDeterminant = new DeterminantParallel();
+//		this.mOpDeterminant = new DeterminantParallel();
 		//this.mOpInverse = new InverseSeq();
 		//this.mOpLinearSolver = new LinearSolverSeq();
 		//this.mOpLUDecompose = new LUDecomposeSeq();
